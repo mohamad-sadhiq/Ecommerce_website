@@ -1,18 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>E-Commerce Platform</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Index</title>
 </head>
 <body>
 
-<div class="container">
-    <h1>Welcome to E-Commerce Platform</h1>
-    <p>Online shopping made simple.</p>
+<h2>Welcome to E-Commerce Platform</h2>
 
-    <a href="/login">Login</a>
-    <a href="/register">Register</a>
-</div>
+<a href="/login">Login</a> |
+<a href="/register">Register</a>
 
 </body>
 </html>
