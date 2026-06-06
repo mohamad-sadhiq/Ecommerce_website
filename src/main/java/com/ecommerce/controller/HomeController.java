@@ -6,23 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
+    // Handles the root URL: GET /
     @GetMapping("/")
-    public String index() {
-        return "index";
+    public String showIndexPage() {
+        return "index"; // Maps to index.jsp (Your beautiful luxury storefront)
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @GetMapping("/register")
-    public String register() {
-        return "register";
-    }
-
-    @GetMapping("/home")
-    public String home() {
-        return "home";
-    }
 }
