@@ -322,8 +322,26 @@
             <div class="action-item profile-dropdown-container">
                 <i class="fas fa-user"></i><span>Profile</span>
                 <div class="profile-dropdown">
-                    <a href="/login">Login</a>
-                    <a href="/register">Signup</a>
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.loggedInUser}">
+                            <div style="padding: 10px 20px; font-size: 11px; color: var(--brand-color); border-bottom: 1px solid var(--border-light); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: var(--bg-cream);">
+                                Hi, ${sessionScope.loggedInUser.fullName}
+                            </div>
+
+                            <c:if test="${sessionScope.loggedInUser.role == 'ADMIN'}">
+                                <a href="/admin/dashboard" style="color: #d9534f; font-weight: 600;"><i class="fas fa-shield-alt" style="margin-right: 5px; font-size: 12px;"></i> Admin Panel</a>
+                            </c:if>
+
+                            <a href="/profile">My Account</a>
+                            <a href="/orders">My Orders</a>
+                            <a href="/logout">Logout</a>
+                        </c:when>
+
+                        <c:otherwise>
+                            <a href="/login">Login</a>
+                            <a href="/register">Signup</a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
 
