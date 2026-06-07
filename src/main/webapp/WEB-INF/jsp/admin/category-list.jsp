@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Inventory | Admin Portal</title>
+    <title>Category Management | Admin Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -16,7 +16,6 @@
         h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; }
         a { text-decoration: none; transition: 0.3s ease; }
 
-        /* Sidebar CSS (Required for the include file) */
         .sidebar { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border-light); display: flex; flex-direction: column; z-index: 10; }
         .brand-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border-light); }
         .brand-header h2 { font-size: 20px; letter-spacing: 3px; color: var(--brand-color); text-transform: uppercase; }
@@ -34,28 +33,31 @@
         .admin-profile { display: flex; align-items: center; gap: 15px; font-size: 14px; font-weight: 500; }
         .admin-avatar { width: 35px; height: 35px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 18px; }
 
-        .dashboard-container { padding: 40px; max-width: 1400px; margin: 0 auto; width: 100%; }
-        .page-header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .dashboard-container { padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .page-header { margin-bottom: 30px; }
         .page-header h1 { font-size: 32px; color: var(--text-dark); margin-bottom: 5px; }
         .page-header p { color: var(--text-gray); font-size: 14px; }
 
-        .btn-primary { background: var(--brand-color); color: white; padding: 12px 25px; border-radius: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; border: 1px solid var(--brand-color); display: flex; align-items: center; gap: 8px; }
-        .btn-primary:hover { background: #5a1220; }
+        .layout-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; align-items: start; }
 
-        .panel { background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 6px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .form-panel { background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 6px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .form-panel h3 { font-size: 18px; color: var(--text-dark); margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 20px; }
+        .form-group label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-gray); margin-bottom: 8px; font-weight: 600; }
+        .form-group input, .form-group textarea { padding: 12px 15px; border: 1px solid var(--border-light); border-radius: 4px; font-size: 13px; outline: none; transition: 0.3s; background: var(--bg-main); color: var(--text-dark); }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--gold-accent); background: white; box-shadow: 0 0 10px rgba(205, 165, 63, 0.1); }
+        .btn-submit { background: var(--brand-color); color: white; padding: 12px; border: none; border-radius: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-submit:hover { background: #5a1220; }
+
+        .table-panel { background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 6px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
         table { width: 100%; border-collapse: collapse; }
         th { background: #fdfdfd; padding: 18px 25px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-gray); border-bottom: 1px solid var(--border-light); }
         td { padding: 15px 25px; border-bottom: 1px solid var(--border-light); font-size: 14px; color: var(--text-dark); vertical-align: middle; }
         tr:last-child td { border-bottom: none; }
         tr:hover { background: var(--bg-main); }
 
-        .prod-img-wrapper { width: 50px; height: 50px; border-radius: 4px; overflow: hidden; background: var(--bg-main); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; }
-        .prod-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-        .no-img-text { font-size: 10px; color: var(--text-gray); text-transform: uppercase; }
-
         .action-cell { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
         .btn-icon { width: 32px; height: 32px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 13px; border: 1px solid var(--border-light); color: var(--text-gray); transition: 0.3s; }
-        .btn-icon.view:hover { background: #28a745; color: white; border-color: #28a745; }
         .btn-icon.edit:hover { background: var(--gold-accent); color: white; border-color: var(--gold-accent); }
         .btn-icon.delete:hover { background: var(--danger); color: white; border-color: var(--danger); }
     </style>
@@ -79,60 +81,56 @@
 
         <div class="dashboard-container">
             <div class="page-header">
-                <div>
-                    <h1 class="serif-font">Product Inventory</h1>
-                    <p>Manage your luxury collections, pricing, and stock levels.</p>
-                </div>
-                <div class="header-actions">
-                    <a href="${pageContext.request.contextPath}/products/add" class="btn-primary"><i class="fas fa-plus"></i> Add Product</a>
-                </div>
+                <h1 class="serif-font">Category Management</h1>
+                <p>Organize your inventory into elegant collections.</p>
             </div>
 
-            <div class="panel">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 80px;">ID</th>
-                            <th style="width: 80px;">Image</th>
-                            <th>Product Name</th>
-                            <th>Category</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                            <th style="text-align: right;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="product" items="${products}">
+            <div class="layout-grid">
+                <div class="form-panel">
+                    <h3 class="serif-font">Create Collection</h3>
+                    <form action="/categories/add" method="post">
+                        <div class="form-group">
+                            <label>Category Name</label>
+                            <input type="text" name="name" placeholder="e.g., Bridal Sets" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description" rows="3" placeholder="Brief details about this collection..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Add Category</button>
+                    </form>
+                </div>
+
+                <div class="table-panel">
+                    <table>
+                        <thead>
                             <tr>
-                                <td>#${product.id}</td>
-                                <td>
-                                    <div class="prod-img-wrapper">
-                                        <c:choose>
-                                            <c:when test="${not empty product.imageUrl}">
-                                                <img src="${product.imageUrl}" alt="${product.name}">
-                                            </c:when>
-                                            <c:otherwise><span class="no-img-text">N/A</span></c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                </td>
-                                <td style="font-weight: 500;">${product.name}</td>
-                                <td>${not empty product.category ? product.category.name : '<em style="color: #ccc;">Uncategorized</em>'}</td>
-                                <td class="serif-font" style="color: var(--brand-color); font-weight: 600;">₹${product.price}</td>
-                                <td>${product.quantity}</td>
-                                <td>
-                                    <div class="action-cell">
-                                        <a href="${pageContext.request.contextPath}/products/${product.id}" class="btn-icon view" title="View Details"><i class="far fa-eye"></i></a>
-                                        <a href="${pageContext.request.contextPath}/products/edit/${product.id}" class="btn-icon edit" title="Edit Product"><i class="fas fa-pen"></i></a>
-                                        <a href="${pageContext.request.contextPath}/products/delete/${product.id}" class="btn-icon delete" title="Delete Product" onclick="return confirm('Permanently delete this product?');"><i class="fas fa-trash"></i></a>
-                                    </div>
-                                </td>
+                                <th style="width: 60px;">ID</th>
+                                <th>Collection Name</th>
+                                <th>Description</th>
+                                <th style="text-align: right;">Actions</th>
                             </tr>
-                        </c:forEach>
-                        <c:if test="${empty products}">
-                            <tr><td colspan="7" style="text-align: center; padding: 50px; color: var(--text-gray);">No products found in the inventory.</td></tr>
-                        </c:if>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="cat" items="${categories}">
+                                <tr>
+                                    <td>#${cat.id}</td>
+                                    <td style="font-weight: 500;">${cat.name}</td>
+                                    <td style="color: var(--text-gray); font-size: 13px;">${cat.description}</td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <a href="/categories/edit/${cat.id}" class="btn-icon edit" title="Edit Category"><i class="fas fa-pen"></i></a>
+                                            <a href="/categories/delete/${cat.id}" class="btn-icon delete" title="Delete Category" onclick="return confirm('Permanently delete the category?');"><i class="fas fa-trash"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            <c:if test="${empty categories}">
+                                <tr><td colspan="4" style="text-align: center; padding: 40px; color: var(--text-gray);">No collections have been created yet.</td></tr>
+                            </c:if>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>

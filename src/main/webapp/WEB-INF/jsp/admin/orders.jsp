@@ -5,18 +5,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Product | Admin Portal</title>
+    <title>Order Priority Queue | Admin Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
+        /* Core layout styling */
         :root { --bg-main: #f8f9fa; --bg-panel: #ffffff; --text-dark: #111111; --text-gray: #6c757d; --brand-color: #7b1e2e; --gold-accent: #cda53f; --border-light: #e9ecef; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Jost', sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
         h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; }
         a { text-decoration: none; transition: 0.3s ease; }
 
-        /* Sidebar Styling */
         .sidebar { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border-light); display: flex; flex-direction: column; z-index: 10; }
         .brand-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border-light); }
         .brand-header h2 { font-size: 20px; letter-spacing: 3px; color: var(--brand-color); text-transform: uppercase; }
@@ -29,29 +28,32 @@
 
         .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
         .topbar { background: var(--bg-panel); height: 70px; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; position: sticky; top: 0; z-index: 5; }
-
         .refresh-btn { background: transparent; border: 1px solid var(--border-light); color: var(--text-dark); padding: 8px 15px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
         .refresh-btn:hover { color: var(--brand-color); border-color: var(--brand-color); background: var(--bg-main); }
-
         .admin-profile { display: flex; align-items: center; gap: 15px; font-size: 14px; font-weight: 500; }
         .admin-avatar { width: 35px; height: 35px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 18px; }
 
-        .dashboard-container { padding: 40px; max-width: 900px; margin: 0 auto; width: 100%; }
+        .dashboard-container { padding: 40px; max-width: 1400px; margin: 0 auto; width: 100%; }
         .page-header { margin-bottom: 30px; }
         .page-header h1 { font-size: 32px; color: var(--text-dark); margin-bottom: 5px; }
         .page-header p { color: var(--text-gray); font-size: 14px; }
 
-        .form-panel { background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 6px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        .form-row { display: flex; gap: 20px; margin-bottom: 20px; }
-        .form-group { flex: 1; display: flex; flex-direction: column; }
-        .form-group label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-gray); margin-bottom: 8px; font-weight: 600; }
-        .form-group input, .form-group textarea, .form-group select { padding: 14px 15px; border: 1px solid var(--border-light); border-radius: 4px; font-size: 14px; outline: none; transition: 0.3s; background: var(--bg-main); color: var(--text-dark); }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold-accent); background: white; box-shadow: 0 0 10px rgba(205, 165, 63, 0.1); }
+        /* Table Styling */
+        .panel { background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 6px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #fdfdfd; padding: 18px 25px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-gray); border-bottom: 1px solid var(--border-light); }
+        td { padding: 15px 25px; border-bottom: 1px solid var(--border-light); font-size: 14px; color: var(--text-dark); vertical-align: middle; }
+        tr:hover { background: var(--bg-main); }
 
-        .btn-submit { background: var(--brand-color); color: white; padding: 15px; border: none; border-radius: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; }
-        .btn-submit:hover { background: #5a1220; }
-        .back-link { display: inline-block; margin-top: 20px; font-size: 12px; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; text-align: center; width: 100%; transition: 0.3s; }
-        .back-link:hover { color: var(--brand-color); }
+        /* Badges */
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
+        .priority-high { background: #ffeeba; color: #856404; }
+        .priority-normal { background: #e2e3e5; color: #383d41; }
+        .status-pending { background: #cce5ff; color: #004085; }
+        .status-shipped { background: #d4edda; color: #155724; }
+
+        .btn-outline { background: transparent; color: var(--brand-color); padding: 8px 15px; border-radius: 4px; font-size: 11px; text-transform: uppercase; font-weight: 600; border: 1px solid var(--brand-color); cursor: pointer; transition: 0.3s; }
+        .btn-outline:hover { background: var(--brand-color); color: white; }
     </style>
 </head>
 <body>
@@ -65,64 +67,51 @@
             </button>
             <div class="admin-profile">
                 <span>${not empty sessionScope.loggedInUser ? sessionScope.loggedInUser.fullName : 'Administrator'}</span>
-                <div class="admin-avatar">
-                    ${not empty sessionScope.loggedInUser ? sessionScope.loggedInUser.fullName.substring(0,1).toUpperCase() : 'A'}
-                </div>
+                <div class="admin-avatar">A</div>
             </div>
         </header>
 
         <div class="dashboard-container">
             <div class="page-header">
-                <h1 class="serif-font">Add New Piece</h1>
-                <p>Register a new product into the luxury inventory.</p>
+                <h1 class="serif-font">Priority Order Queue</h1>
+                <p>Manage and fulfill incoming client orders based on priority and timestamp.</p>
             </div>
 
-            <div class="form-panel">
-                <form action="/products/add" method="post">
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label>Product Name</label>
-                        <input type="text" name="name" placeholder="e.g. 18Kt Gold Diamond Ring" required>
-                    </div>
+            <div class="panel">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date & Time</th>
+                            <th>Priority</th>
+                            <th>Customer</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="order" items="${orders}">
+                            <tr>
+                                <td style="font-weight: 600;">#${order.id}</td>
+                                <td style="color: var(--text-gray); font-size: 12px;">${order.orderDate}</td>
+                                <td><span class="badge priority-normal">Standard</span></td>
+                                <td>${order.user.fullName}</td>
+                                <td class="serif-font" style="color: var(--brand-color); font-weight: 600;">₹${order.totalAmount}</td>
+                                <td><span class="badge status-pending">${order.status}</span></td>
+                                <td style="text-align: right;">
+                                    <button class="btn-outline">Process Order</button>
+                                </td>
+                            </tr>
+                        </c:forEach>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label>Description</label>
-                        <textarea name="description" rows="4" placeholder="Detail the craftsmanship and materials..." required></textarea>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Price (₹)</label>
-                            <input type="number" step="0.01" name="price" placeholder="0.00" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Quantity in Stock</label>
-                            <input type="number" name="quantity" placeholder="0" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select name="categoryId" required>
-                                <option value="">-- Select Collection --</option>
-                                <c:forEach var="category" items="${categories}">
-                                    <option value="${category.id}">${category.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>High-Res Image URL</label>
-                            <input type="text" name="imageUrl" placeholder="https://...">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Publish Product</button>
-                </form>
-
-                <a href="/products" class="back-link"><i class="fas fa-arrow-left"></i> Return to Inventory</a>
+                        <c:if test="${empty orders}">
+                            <tr><td colspan="7" style="text-align: center; padding: 40px; color: var(--text-gray);">Awaiting connection to Order Database (Member 3).</td></tr>
+                        </c:if>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
-
 </body>
 </html>

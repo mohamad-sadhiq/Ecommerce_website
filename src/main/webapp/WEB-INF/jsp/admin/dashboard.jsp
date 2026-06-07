@@ -1,176 +1,134 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Category Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | SHADOW & CUT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            padding: 30px;
-        }
+        :root { --bg-main: #fcfbf9; --bg-panel: #ffffff; --text-dark: #111111; --text-gray: #777777; --brand-color: #5a1220; --gold-accent: #cda53f; --border-light: #eaeaea; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Jost', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
+        h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; font-weight: 400; }
+        a { text-decoration: none; transition: 0.3s; }
 
-        .container {
-            width: 850px;
-            margin: auto;
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-        }
+        /* Sidebar Styling (Matches the include file) */
+        .sidebar { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border-light); display: flex; flex-direction: column; z-index: 10; }
+        .brand-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border-light); }
+        .brand-header h2 { font-size: 20px; letter-spacing: 3px; color: var(--brand-color); text-transform: uppercase; }
+        .admin-badge { display: inline-block; margin-top: 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-accent); border: 1px solid var(--gold-accent); padding: 3px 10px; border-radius: 20px; }
+        .nav-menu { flex: 1; padding: 20px 0; overflow-y: auto; }
+        .nav-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #adb5bd; margin: 20px 20px 10px; font-weight: 600; }
+        .nav-item { display: flex; align-items: center; gap: 15px; padding: 12px 25px; color: var(--text-gray); font-size: 14px; font-weight: 500; border-left: 3px solid transparent; cursor: pointer; }
+        .nav-item i { font-size: 16px; width: 20px; text-align: center; }
+        .nav-item:hover, .nav-item.active { background: var(--bg-main); color: var(--brand-color); border-left-color: var(--brand-color); }
 
-        h2, h3 {
-            text-align: center;
-        }
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .topbar { background: var(--bg-panel); height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; border-bottom: 1px solid var(--border-light); z-index: 5; }
 
-        label {
-            display: block;
-            margin-top: 12px;
-            font-weight: bold;
-        }
+        .refresh-btn { background: transparent; border: 1px solid var(--border-light); color: var(--text-dark); padding: 8px 15px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .refresh-btn:hover { color: var(--brand-color); border-color: var(--brand-color); background: var(--bg-main); }
 
-        input, textarea {
-            width: 100%;
-            padding: 9px;
-            margin-top: 5px;
-            box-sizing: border-box;
-        }
+        .admin-profile { display: flex; align-items: center; gap: 15px; font-size: 14px; font-weight: 500; }
+        .admin-avatar { width: 35px; height: 35px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 18px; }
 
-        button {
-            margin-top: 15px;
-            padding: 9px 14px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        .dashboard-container { padding: 30px 40px; max-width: 1400px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; height: calc(100vh - 70px); overflow-y: auto; }
 
-        .top-actions {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
+        .page-header { margin-bottom: 25px; flex-shrink: 0; }
+        .page-header h1 { font-size: 28px; color: var(--text-dark); margin-bottom: 5px; }
+        .page-header p { color: var(--text-gray); font-size: 13px; }
 
-        .btn {
-            padding: 8px 13px;
-            text-decoration: none;
-            border-radius: 5px;
-            color: white;
-            margin: 2px;
-            display: inline-block;
-        }
+        .metrics-strip { display: flex; background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 4px; margin-bottom: 30px; flex-shrink: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.01); }
+        .metric-block { flex: 1; padding: 20px; border-right: 1px solid var(--border-light); display: flex; flex-direction: column; justify-content: center; }
+        .metric-block:last-child { border-right: none; }
+        .metric-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-gray); margin-bottom: 8px; font-weight: 600; }
+        .metric-value { font-size: 28px; color: var(--brand-color); line-height: 1; margin-bottom: 5px; font-weight: 500; }
+        .metric-sub { font-size: 11px; color: #999; }
+        .trend-up { color: #5a8a63; }
 
-        .btn-blue {
-            background-color: #007bff;
-        }
-
-        .btn-green {
-            background-color: #28a745;
-        }
-
-        .btn-warning {
-            background-color: #ffc107;
-            color: black;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
-        }
-
-        .btn-gray {
-            background-color: #6c757d;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 25px;
-        }
-
-        th {
-            background-color: #343a40;
-            color: white;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 11px;
-            text-align: center;
-        }
+        .section-title { font-size: 18px; color: var(--text-dark); margin-bottom: 15px; flex-shrink: 0; }
+        .control-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; flex-grow: 1; min-height: 0; }
+        .control-card { background: var(--bg-panel); border: 1px solid var(--border-light); padding: 20px; display: flex; align-items: flex-start; gap: 15px; transition: 0.3s; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.01); }
+        .control-card:hover { border-color: var(--gold-accent); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
+        .control-icon { font-size: 20px; color: var(--gold-accent); margin-top: 2px; }
+        .control-info { flex: 1; display: flex; flex-direction: column; height: 100%; }
+        .control-info h3 { font-size: 16px; margin-bottom: 6px; color: var(--text-dark); }
+        .control-info p { font-size: 12px; color: var(--text-gray); line-height: 1.5; margin-bottom: 10px; flex-grow: 1; }
+        .action-link { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--brand-color); font-weight: 600; display: inline-flex; align-items: center; gap: 5px; margin-top: auto; }
     </style>
 </head>
-
 <body>
 
-<div class="container">
+    <%@ include file="/WEB-INF/jsp/admin/admin-sidebar.jsp" %>
 
-    <h2>Category Management</h2>
+    <main class="main-content">
+        <header class="topbar">
+            <button onclick="window.location.reload();" class="refresh-btn">
+                <i class="fas fa-sync-alt"></i> Live Sync
+            </button>
+            <div class="admin-profile">
+                <span>${not empty sessionScope.loggedInUser ? sessionScope.loggedInUser.fullName : 'Administrator'}</span>
+                <div class="admin-avatar">
+                    ${not empty sessionScope.loggedInUser ? sessionScope.loggedInUser.fullName.substring(0,1).toUpperCase() : 'A'}
+                </div>
+            </div>
+        </header>
 
-    <div class="top-actions">
-        <div>
-            <a href="${pageContext.request.contextPath}/products" class="btn btn-green">View Products</a>
-            <a href="${pageContext.request.contextPath}/products/add" class="btn btn-blue">Add Product</a>
+        <div class="dashboard-container">
+            <div class="page-header">
+                <h1 class="serif-font">Dashboard</h1>
+                <p>Real-time overview of store performance and inventory.</p>
+            </div>
+
+            <div class="metrics-strip">
+                <div class="metric-block">
+                    <span class="metric-label">Registered Clients</span>
+                    <div class="metric-value serif-font">${not empty totalUsers ? totalUsers : 0}</div>
+                    <div class="metric-sub"><i class="fas fa-sync-alt" style="font-size:9px;"></i> Live Sync</div>
+                </div>
+                <div class="metric-block">
+                    <span class="metric-label">Active Inventory</span>
+                    <div class="metric-value serif-font">${not empty totalProducts ? totalProducts : 0}</div>
+                    <div class="metric-sub"><i class="fas fa-sync-alt" style="font-size:9px;"></i> Live Sync</div>
+                </div>
+                <div class="metric-block">
+                    <span class="metric-label">Pending Fulfillment</span>
+                    <div class="metric-value serif-font">${not empty totalOrders ? totalOrders : 0}</div>
+                    <div class="metric-sub">Orders awaiting dispatch</div>
+                </div>
+                <div class="metric-block">
+                    <span class="metric-label">Gross Revenue</span>
+                    <div class="metric-value serif-font">₹${not empty totalRevenue ? totalRevenue : '0'}</div>
+                    <div class="metric-sub trend-up"><i class="fas fa-arrow-up"></i> 12% vs last month</div>
+                </div>
+            </div>
+
+            <h2 class="section-title serif-font">Management Hub</h2>
+
+            <div class="control-grid">
+                <a href="/products" class="control-card">
+                    <div class="control-icon"><i class="fas fa-gem"></i></div>
+                    <div class="control-info">
+                        <h3 class="serif-font">Inventory & Pricing</h3>
+                        <p>Curate collections, adjust pricing, and monitor stock.</p>
+                        <span class="action-link">Manage Inventory <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <a href="/categories" class="control-card">
+                    <div class="control-icon"><i class="fas fa-tags"></i></div>
+                    <div class="control-info">
+                        <h3 class="serif-font">Product Collections</h3>
+                        <p>Organize inventory into bridal, diamond, and gold categories.</p>
+                        <span class="action-link">Manage Categories <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+            </div>
         </div>
-
-        <div>
-            <a href="${pageContext.request.contextPath}/categories" class="btn btn-gray">Refresh</a>
-        </div>
-    </div>
-
-    <h3>Add Category</h3>
-
-    <form action="${pageContext.request.contextPath}/categories/add" method="post">
-        <label>Category Name</label>
-        <input type="text" name="name" placeholder="Example: Gold, Rings, Chains" required>
-
-        <label>Description</label>
-        <textarea name="description" rows="3" placeholder="Enter category description"></textarea>
-
-        <button type="submit">Add Category</button>
-    </form>
-
-    <h3>Existing Categories</h3>
-
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Category Name</th>
-            <th>Description</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        <c:forEach var="category" items="${categories}">
-            <tr>
-                <td>${category.id}</td>
-                <td>${category.name}</td>
-                <td>${category.description}</td>
-                <td>
-                    <a href="${pageContext.request.contextPath}/categories/edit/${category.id}" class="btn btn-warning">Edit</a>
-
-                    <a href="${pageContext.request.contextPath}/categories/delete/${category.id}"
-                       class="btn btn-danger"
-                       onclick="return confirm('Are you sure you want to delete this category?');">
-                        Delete
-                    </a>
-                </td>
-            </tr>
-        </c:forEach>
-
-        <c:if test="${empty categories}">
-            <tr>
-                <td colspan="4">No categories available.</td>
-            </tr>
-        </c:if>
-        </tbody>
-    </table>
-
-</div>
+    </main>
 
 </body>
 </html>
