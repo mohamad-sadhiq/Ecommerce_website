@@ -103,73 +103,60 @@
             </div>
         </header>
 
-        <div class="dashboard-container">
-            <div class="page-header">
-                <h1 class="serif-font">Store Configuration</h1>
-                <p>Manage operational hours, announcements, and global site behavior.</p>
-            </div>
+      <div class="dashboard-container">
+                  <div class="page-header">
+                      <h1 class="serif-font">Store Configuration</h1>
+                      <p>Manage operational announcements and global site behavior.</p>
+                  </div>
 
-            <form action="/admin/settings/update" method="POST">
+                  <c:if test="${not empty successMsg}">
+                      <div style="background: #28a745; color: white; padding: 15px 25px; margin-bottom: 25px; border-radius: 6px; font-weight: 500; display: flex; align-items: center; gap: 10px; animation: fadeIn 0.5s;">
+                          <i class="fas fa-check-circle"></i> ${successMsg}
+                      </div>
+                  </c:if>
 
-                <div class="settings-card">
-                    <div class="section-title"><i class="fas fa-bullhorn" style="color: var(--text-gray);"></i> Storefront Announcements</div>
+                  <form action="/admin/settings/update" method="POST">
 
-                    <div class="form-group">
-                        <div class="toggle-row">
-                            <div class="toggle-info">
-                                <span class="toggle-title">Enable Utility Bar</span>
-                                <span class="toggle-desc">Displays the scrolling message at the very top of the website.</span>
-                            </div>
-                            <label class="switch">
-                                <input type="checkbox" name="showAnnouncement" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
+                      <div class="settings-card">
+                          <div class="section-title"><i class="fas fa-bullhorn" style="color: var(--text-gray);"></i> Storefront Announcements</div>
 
-                    <div class="form-group">
-                        <label>Utility Bar Text</label>
-                        <p class="sub-label">Update the promotional message shown to all customers.</p>
-                        <input type="text" name="announcementText" value="Free Insured Shipping Across India | 100% Certified Jewellery">
-                    </div>
-                </div>
+                          <div class="form-group">
+                              <div class="toggle-row">
+                                  <div class="toggle-info">
+                                      <span class="toggle-title">Enable Utility Bar</span>
+                                      <span class="toggle-desc">Displays the scrolling message at the very top of the website.</span>
+                                  </div>
+                                  <label class="switch">
+                                      <input type="checkbox" name="showAnnouncement" ${applicationScope.showAnnouncement != false ? 'checked' : ''}>
+                                      <span class="slider"></span>
+                                  </label>
+                              </div>
+                          </div>
 
-                <div class="settings-card">
-                    <div class="section-title"><i class="far fa-clock" style="color: var(--text-gray);"></i> Operating Hours</div>
+                          <div class="form-group">
+                              <label>Utility Bar Text</label>
+                              <p class="sub-label">Update the promotional message shown to all customers.</p>
+                              <input type="text" name="announcementText" value="${not empty applicationScope.announcementText ? applicationScope.announcementText : 'Free Insured Shipping Across India | 100% Certified Jewellery'}">
+                          </div>
+                      </div>
 
-                    <div class="form-group">
-                        <p class="sub-label" style="margin-bottom: 20px;">Set the hours your customer support and live order processing are active.</p>
-                        <div class="time-grid">
-                            <div>
-                                <label style="color: var(--text-dark);">Opening Time</label>
-                                <input type="time" name="openTime" value="09:00">
-                            </div>
-                            <div>
-                                <label style="color: var(--text-dark);">Closing Time</label>
-                                <input type="time" name="closeTime" value="21:30">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                      <div class="settings-card danger-zone">
+                          <div class="section-title"><i class="fas fa-exclamation-triangle"></i> Danger Zone</div>
+                          <div class="toggle-row" style="border-color: #f5c6cb; background: #fff;">
+                              <div class="toggle-info">
+                                  <span class="toggle-title" style="color: var(--danger);">Emergency Store Closure</span>
+                                  <span class="toggle-desc">Instantly disables checkout and displays a "Holiday/Maintenance" screen.</span>
+                              </div>
+                              <label class="switch">
+                                  <input type="checkbox" name="emergencyClose" ${applicationScope.emergencyClose == true ? 'checked' : ''}>
+                                  <span class="slider"></span>
+                              </label>
+                          </div>
+                      </div>
 
-                <div class="settings-card danger-zone">
-                    <div class="section-title"><i class="fas fa-exclamation-triangle"></i> Danger Zone</div>
-
-                    <div class="toggle-row" style="border-color: #f5c6cb; background: #fff;">
-                        <div class="toggle-info">
-                            <span class="toggle-title" style="color: var(--danger);">Emergency Store Closure</span>
-                            <span class="toggle-desc">Instantly disables checkout and displays a "Holiday/Maintenance" screen.</span>
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" name="emergencyClose">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Save Global Settings</button>
-            </form>
-        </div>
-    </main>
-</body>
-</html>
+                      <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Save Global Settings</button>
+                  </form>
+              </div>
+          </main>
+      </body>
+      </html>

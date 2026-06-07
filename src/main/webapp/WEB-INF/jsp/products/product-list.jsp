@@ -16,7 +16,6 @@
         h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; }
         a { text-decoration: none; transition: 0.3s ease; }
 
-        /* Sidebar CSS (Required for the include file) */
         .sidebar { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border-light); display: flex; flex-direction: column; z-index: 10; }
         .brand-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border-light); }
         .brand-header h2 { font-size: 20px; letter-spacing: 3px; color: var(--brand-color); text-transform: uppercase; }
@@ -84,7 +83,7 @@
                     <p>Manage your luxury collections, pricing, and stock levels.</p>
                 </div>
                 <div class="header-actions">
-                    <a href="${pageContext.request.contextPath}/products/add" class="btn-primary"><i class="fas fa-plus"></i> Add Product</a>
+                    <a href="${pageContext.request.contextPath}/admin/products/add" class="btn-primary"><i class="fas fa-plus"></i> Add Product</a>
                 </div>
             </div>
 
@@ -121,9 +120,9 @@
                                 <td>${product.quantity}</td>
                                 <td>
                                     <div class="action-cell">
-                                        <a href="${pageContext.request.contextPath}/products/${product.id}" class="btn-icon view" title="View Details"><i class="far fa-eye"></i></a>
-                                        <a href="${pageContext.request.contextPath}/products/edit/${product.id}" class="btn-icon edit" title="Edit Product"><i class="fas fa-pen"></i></a>
-                                        <a href="${pageContext.request.contextPath}/products/delete/${product.id}" class="btn-icon delete" title="Delete Product" onclick="return confirm('Permanently delete this product?');"><i class="fas fa-trash"></i></a>
+                                        <a href="${pageContext.request.contextPath}/admin/products/view/${product.id}" class="btn-icon view" title="View Details"><i class="far fa-eye"></i></a>
+                                        <a href="${pageContext.request.contextPath}/admin/products/edit/${product.id}" class="btn-icon edit" title="Edit Product"><i class="fas fa-pen"></i></a>
+                                        <a href="${pageContext.request.contextPath}/admin/products/delete/${product.id}" class="btn-icon delete" title="Delete Product" onclick="return confirm('Permanently delete this product?');"><i class="fas fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>

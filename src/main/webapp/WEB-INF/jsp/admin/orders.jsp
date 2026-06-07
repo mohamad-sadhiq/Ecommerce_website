@@ -99,9 +99,17 @@
                                 <td>${order.user.fullName}</td>
                                 <td class="serif-font" style="color: var(--brand-color); font-weight: 600;">₹${order.totalAmount}</td>
                                 <td><span class="badge status-pending">${order.status}</span></td>
-                                <td style="text-align: right;">
-                                    <button class="btn-outline">Process Order</button>
-                                </td>
+                               <td style="text-align: right;">
+                                   <form action="/admin/orders/update-status/${order.id}" method="POST" style="display: flex; gap: 8px; justify-content: flex-end; align-items: center;">
+                                       <select name="status" style="padding: 6px; border: 1px solid var(--border-light); border-radius: 4px; font-size: 11px; text-transform: uppercase; outline: none;">
+                                           <option value="PENDING" <c:if test="${order.status == 'PENDING'}">selected</c:if>>Pending</option>
+                                           <option value="PROCESSING" <c:if test="${order.status == 'PROCESSING'}">selected</c:if>>Processing</option>
+                                           <option value="SHIPPED" <c:if test="${order.status == 'SHIPPED'}">selected</c:if>>Shipped</option>
+                                           <option value="DELIVERED" <c:if test="${order.status == 'DELIVERED'}">selected</c:if>>Delivered</option>
+                                       </select>
+                                       <button type="submit" class="btn-outline" style="padding: 6px 12px;">Update</button>
+                                   </form>
+                               </td>
                             </tr>
                         </c:forEach>
 

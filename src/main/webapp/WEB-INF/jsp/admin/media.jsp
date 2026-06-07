@@ -90,101 +90,107 @@
             </div>
         </header>
 
-        <div class="dashboard-container">
-            <div class="page-header">
-                <div>
-                    <h1 class="serif-font">Storefront Media</h1>
-                    <p>Update homepage sliders, videos, and editorial text seamlessly.</p>
-                </div>
-            </div>
+       <div class="dashboard-container">
+                   <div class="page-header">
+                       <div>
+                           <h1 class="serif-font">Storefront Media</h1>
+                           <p>Update homepage sliders, videos, and editorial text seamlessly.</p>
+                       </div>
+                   </div>
 
-            <div class="media-grid">
-                <div class="media-card">
-                    <div class="card-header"><i class="fas fa-images"></i> Hero Carousel</div>
-                    <div class="card-body">
-                        <form action="/admin/media/hero" method="POST">
-                            <div class="media-block">
-                                <div class="block-title">Slide 1 (Main Video) <i class="fas fa-video"></i></div>
-                                <div class="form-group">
-                                    <label>Background Video URL (.mp4)</label>
-                                    <input type="text" name="slide1_media" value="https://cdn.pixabay.com/video/2021/08/25/86259-592868735_large.mp4" placeholder="Enter secure video URL">
-                                </div>
-                                <div class="form-group">
-                                    <label>Heading Text</label>
-                                    <input type="text" name="slide1_heading" value="The Bridal Masterpiece">
-                                </div>
-                                <div class="form-group">
-                                    <label>Sub-text Description</label>
-                                    <textarea name="slide1_desc" rows="2">Exquisite craftsmanship for your most special day.</textarea>
-                                </div>
-                            </div>
+                   <c:if test="${not empty successMsg}">
+                       <div style="background: #28a745; color: white; padding: 15px 25px; margin-bottom: 25px; border-radius: 6px; font-weight: 500; display: flex; align-items: center; gap: 10px; animation: fadeIn 0.5s;">
+                           <i class="fas fa-check-circle"></i> ${successMsg}
+                       </div>
+                   </c:if>
 
-                            <div class="media-block">
-                                <div class="block-title">Slide 2 (Static Image) <i class="fas fa-image"></i></div>
-                                <div class="form-group">
-                                    <label>Background Image URL</label>
-                                    <input type="text" name="slide2_media" value="https://images.unsplash.com/photo-1599643478524-fb66f70d00f7?q=100&w=2800">
-                                </div>
-                                <div class="form-group">
-                                    <label>Heading Text</label>
-                                    <input type="text" name="slide2_heading" value="Diamond Elegance">
-                                </div>
-                                <div class="form-group">
-                                    <label>Sub-text Description</label>
-                                    <textarea name="slide2_desc" rows="2">Discover our latest arrivals in pure diamond settings.</textarea>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn-submit"><i class="fas fa-cloud-upload-alt"></i> Publish Sliders</button>
-                        </form>
-                    </div>
-                </div>
+                   <div class="media-grid">
+                       <div class="media-card">
+                           <div class="card-header"><i class="fas fa-images"></i> Hero Carousel</div>
+                           <div class="card-body">
+                               <form action="/admin/media/hero" method="POST">
+                                   <div class="media-block">
+                                       <div class="block-title">Slide 1 (Main Video) <i class="fas fa-video"></i></div>
+                                       <div class="form-group">
+                                           <label>Background Video URL (.mp4)</label>
+                                           <input type="text" name="slide1_media" value="${not empty applicationScope.slide1_media ? applicationScope.slide1_media : 'https://cdn.pixabay.com/video/2021/08/25/86259-592868735_large.mp4'}">
+                                       </div>
+                                       <div class="form-group">
+                                           <label>Heading Text</label>
+                                           <input type="text" name="slide1_heading" value="${not empty applicationScope.slide1_heading ? applicationScope.slide1_heading : 'The Bridal Masterpiece'}">
+                                       </div>
+                                       <div class="form-group">
+                                           <label>Sub-text Description</label>
+                                           <textarea name="slide1_desc" rows="2">${not empty applicationScope.slide1_desc ? applicationScope.slide1_desc : 'Exquisite craftsmanship for your most special day.'}</textarea>
+                                       </div>
+                                   </div>
 
-                <div class="media-card">
-                    <div class="card-header"><i class="fas fa-play-circle"></i> "Collection In Motion"</div>
-                    <div class="card-body">
-                        <form action="/admin/media/videos" method="POST">
-                            <div class="media-block">
-                                <div class="block-title">Interactive Panel 1</div>
-                                <div class="form-group">
-                                    <label>Video URL</label>
-                                    <input type="text" name="video1_url" value="https://res.cloudinary.com/dq3omqbjo/video/upload/q_auto/f_auto/v1780766925/Cinematic.mp4">
-                                </div>
-                                <div class="form-group">
-                                    <label>Hover Heading</label>
-                                    <input type="text" name="video1_heading" value="Aura Rings">
-                                </div>
-                            </div>
+                                   <div class="media-block">
+                                       <div class="block-title">Slide 2 (Static Image) <i class="fas fa-image"></i></div>
+                                       <div class="form-group">
+                                           <label>Background Image URL</label>
+                                           <input type="text" name="slide2_media" value="${not empty applicationScope.slide2_media ? applicationScope.slide2_media : 'https://images.unsplash.com/photo-1599643478524-fb66f70d00f7?q=100&w=2800'}">
+                                       </div>
+                                       <div class="form-group">
+                                           <label>Heading Text</label>
+                                           <input type="text" name="slide2_heading" value="${not empty applicationScope.slide2_heading ? applicationScope.slide2_heading : 'Diamond Elegance'}">
+                                       </div>
+                                       <div class="form-group">
+                                           <label>Sub-text Description</label>
+                                           <textarea name="slide2_desc" rows="2">${not empty applicationScope.slide2_desc ? applicationScope.slide2_desc : 'Discover our latest arrivals in pure diamond settings.'}</textarea>
+                                       </div>
+                                   </div>
+                                   <button type="submit" class="btn-submit"><i class="fas fa-cloud-upload-alt"></i> Publish Sliders</button>
+                               </form>
+                           </div>
+                       </div>
 
-                            <div class="media-block">
-                                <div class="block-title">Interactive Panel 2</div>
-                                <div class="form-group">
-                                    <label>Video URL</label>
-                                    <input type="text" name="video2_url" value="https://res.cloudinary.com/dq3omqbjo/video/upload/q_auto/f_auto/v1780767017/Close_up.mp4">
-                                </div>
-                                <div class="form-group">
-                                    <label>Hover Heading</label>
-                                    <input type="text" name="video2_heading" value="Royal Necklaces">
-                                </div>
-                            </div>
+                       <div class="media-card">
+                           <div class="card-header"><i class="fas fa-play-circle"></i> "Collection In Motion"</div>
+                           <div class="card-body">
+                               <form action="/admin/media/videos" method="POST">
+                                   <div class="media-block">
+                                       <div class="block-title">Interactive Panel 1</div>
+                                       <div class="form-group">
+                                           <label>Video URL</label>
+                                           <input type="text" name="video1_url" value="${not empty applicationScope.video1_url ? applicationScope.video1_url : 'https://res.cloudinary.com/dq3omqbjo/video/upload/q_auto/f_auto/v1780766925/Cinematic_macro_slow_motion_sh_processed_ch1rhq.mp4'}">
+                                       </div>
+                                       <div class="form-group">
+                                           <label>Hover Heading</label>
+                                           <input type="text" name="video1_heading" value="${not empty applicationScope.video1_heading ? applicationScope.video1_heading : 'Aura Rings'}">
+                                       </div>
+                                   </div>
 
-                            <div class="media-block">
-                                <div class="block-title">Interactive Panel 3</div>
-                                <div class="form-group">
-                                    <label>Video URL</label>
-                                    <input type="text" name="video3_url" value="https://res.cloudinary.com/dq3omqbjo/video/upload/v1780766841/Macro_shot.mp4">
-                                </div>
-                                <div class="form-group">
-                                    <label>Hover Heading</label>
-                                    <input type="text" name="video3_heading" value="Bridal Sets">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn-submit" style="background: #111;"><i class="fas fa-cloud-upload-alt"></i> Publish Videos</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                                   <div class="media-block">
+                                       <div class="block-title">Interactive Panel 2</div>
+                                       <div class="form-group">
+                                           <label>Video URL</label>
+                                           <input type="text" name="video2_url" value="${not empty applicationScope.video2_url ? applicationScope.video2_url : 'https://res.cloudinary.com/dq3omqbjo/video/upload/q_auto/f_auto/v1780767017/Close_up_lifestyle_shot_of_a_w_processed_w0zmdu.mp4'}">
+                                       </div>
+                                       <div class="form-group">
+                                           <label>Hover Heading</label>
+                                           <input type="text" name="video2_heading" value="${not empty applicationScope.video2_heading ? applicationScope.video2_heading : 'Royal Necklaces'}">
+                                       </div>
+                                   </div>
 
-        </div>
-    </main>
-</body>
-</html>
+                                   <div class="media-block">
+                                       <div class="block-title">Interactive Panel 3</div>
+                                       <div class="form-group">
+                                           <label>Video URL</label>
+                                           <input type="text" name="video3_url" value="${not empty applicationScope.video3_url ? applicationScope.video3_url : 'https://res.cloudinary.com/dq3omqbjo/video/upload/v1780766841/Macro_shot_of_black_diamonds_a_processed_si6sgq.mp4'}">
+                                       </div>
+                                       <div class="form-group">
+                                           <label>Hover Heading</label>
+                                           <input type="text" name="video3_heading" value="${not empty applicationScope.video3_heading ? applicationScope.video3_heading : 'Bridal Sets'}">
+                                       </div>
+                                   </div>
+                                   <button type="submit" class="btn-submit"><i class="fas fa-cloud-upload-alt"></i> Publish Videos</button>
+                               </form>
+                           </div>
+                       </div>
+                   </div>
+
+               </div>
+           </main>
+       </body>
+       </html>

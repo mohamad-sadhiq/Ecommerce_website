@@ -23,7 +23,6 @@ public class OrderController {
         if (user == null) return "redirect:/login";
 
         Order order = orderService.createOrder(user, shippingAddress);
-        // Redirect to Member 4's mock payment flow
         return "redirect:/payments/status/" + order.getId();
     }
 
@@ -45,11 +44,5 @@ public class OrderController {
         Order order = orderService.getOrderDetails(orderId);
         model.addAttribute("order", order);
         return "orders/order-details";
-    }
-
-    @PostMapping("/update-status/{orderId}")
-    public String updateStatus(@PathVariable("orderId") Long orderId, @RequestParam("status") String status) {
-        orderService.updateOrderStatus(orderId, status);
-        return "redirect:/orders/" + orderId;
     }
 }

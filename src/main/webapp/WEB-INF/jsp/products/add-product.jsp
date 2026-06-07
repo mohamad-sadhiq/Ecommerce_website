@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root { --bg-main: #f8f9fa; --bg-panel: #ffffff; --text-dark: #111111; --text-gray: #6c757d; --brand-color: #7b1e2e; --gold-accent: #cda53f; --border-light: #e9ecef; }
+        :root { --bg-main: #fcfbf9; --bg-panel: #ffffff; --text-dark: #111111; --text-gray: #777777; --brand-color: #5a1220; --gold-accent: #cda53f; --border-light: #eaeaea; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Jost', sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
         h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; }
         a { text-decoration: none; transition: 0.3s ease; }
 
-        /* Sidebar Styling */
+        /* Sidebar CSS */
         .sidebar { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border-light); display: flex; flex-direction: column; z-index: 10; }
         .brand-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border-light); }
         .brand-header h2 { font-size: 20px; letter-spacing: 3px; color: var(--brand-color); text-transform: uppercase; }
@@ -28,30 +28,26 @@
         .nav-item:hover, .nav-item.active { background: var(--bg-main); color: var(--brand-color); border-left-color: var(--brand-color); }
 
         .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
-        .topbar { background: var(--bg-panel); height: 70px; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; padding: 0 40px; position: sticky; top: 0; z-index: 5; }
-
-        .refresh-btn { background: transparent; border: 1px solid var(--border-light); color: var(--text-dark); padding: 8px 15px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        .refresh-btn:hover { color: var(--brand-color); border-color: var(--brand-color); background: var(--bg-main); }
-
+        .topbar { background: var(--bg-panel); height: 70px; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: flex-end; padding: 0 40px; position: sticky; top: 0; z-index: 5; }
         .admin-profile { display: flex; align-items: center; gap: 15px; font-size: 14px; font-weight: 500; }
         .admin-avatar { width: 35px; height: 35px; background: var(--brand-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 18px; }
 
-        .dashboard-container { padding: 40px; max-width: 900px; margin: 0 auto; width: 100%; }
-        .page-header { margin-bottom: 30px; }
+        .dashboard-container { padding: 40px; max-width: 800px; margin: 0 auto; width: 100%; }
+        .page-header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end; }
         .page-header h1 { font-size: 32px; color: var(--text-dark); margin-bottom: 5px; }
-        .page-header p { color: var(--text-gray); font-size: 14px; }
 
-        .form-panel { background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 6px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
-        .form-row { display: flex; gap: 20px; margin-bottom: 20px; }
-        .form-group { flex: 1; display: flex; flex-direction: column; }
-        .form-group label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-gray); margin-bottom: 8px; font-weight: 600; }
-        .form-group input, .form-group textarea, .form-group select { padding: 14px 15px; border: 1px solid var(--border-light); border-radius: 4px; font-size: 14px; outline: none; transition: 0.3s; background: var(--bg-main); color: var(--text-dark); }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold-accent); background: white; box-shadow: 0 0 10px rgba(205, 165, 63, 0.1); }
+        .form-card { background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 6px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-gray); margin-bottom: 8px; font-weight: 600; }
+        input, textarea, select { width: 100%; padding: 12px 15px; border: 1px solid var(--border-light); border-radius: 3px; font-size: 14px; transition: 0.3s; background: #fafafa; }
+        input:focus, textarea:focus, select:focus { border-color: var(--gold-accent); outline: none; background: white; }
 
-        .btn-submit { background: var(--brand-color); color: white; padding: 15px; border: none; border-radius: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.3s; }
-        .btn-submit:hover { background: #5a1220; }
-        .back-link { display: inline-block; margin-top: 20px; font-size: 12px; color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; text-align: center; width: 100%; transition: 0.3s; }
-        .back-link:hover { color: var(--brand-color); }
+        .btn-submit { width: 100%; background: var(--brand-color); color: white; padding: 15px; border: none; border-radius: 3px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-submit:hover { background: var(--text-dark); }
+
+        .btn-outline { display: inline-block; background: transparent; color: var(--text-dark); padding: 10px 20px; border-radius: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; border: 1px solid var(--border-light); transition: 0.3s; }
+        .btn-outline:hover { border-color: var(--brand-color); color: var(--brand-color); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     </style>
 </head>
 <body>
@@ -60,9 +56,6 @@
 
     <main class="main-content">
         <header class="topbar">
-            <button onclick="window.location.reload();" class="refresh-btn">
-                <i class="fas fa-sync-alt"></i> Live Sync
-            </button>
             <div class="admin-profile">
                 <span>${not empty sessionScope.loggedInUser ? sessionScope.loggedInUser.fullName : 'Administrator'}</span>
                 <div class="admin-avatar">
@@ -73,43 +66,48 @@
 
         <div class="dashboard-container">
             <div class="page-header">
-                <h1 class="serif-font">Add New Piece</h1>
-                <p>Register a new product into the luxury inventory.</p>
+                <div>
+                    <h1 class="serif-font">Add New Piece</h1>
+                </div>
+                <a href="/admin/products" class="btn-outline"><i class="fas fa-arrow-left"></i> Cancel</a>
             </div>
 
-            <div class="form-panel">
-                <form action="/products/add" method="post">
-                    <div class="form-group" style="margin-bottom: 20px;">
+            <div class="form-card">
+                <form action="/admin/products/add" method="post">
+
+                    <div class="form-group">
                         <label>Product Name</label>
-                        <input type="text" name="name" placeholder="e.g. 18Kt Gold Diamond Ring" required>
+                        <input type="text" name="name" placeholder="e.g. 22Kt Gold Bridal Necklace" required>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
+                    <div class="form-group">
                         <label>Description</label>
-                        <textarea name="description" rows="4" placeholder="Detail the craftsmanship and materials..." required></textarea>
+                        <textarea name="description" rows="4" placeholder="Enter detailed product description..." required></textarea>
                     </div>
 
-                    <div class="form-row">
+                    <div class="grid-2">
                         <div class="form-group">
                             <label>Price (₹)</label>
                             <input type="number" step="0.01" name="price" placeholder="0.00" required>
                         </div>
+
                         <div class="form-group">
-                            <label>Quantity in Stock</label>
+                            <label>Stock Quantity</label>
                             <input type="number" name="quantity" placeholder="0" required>
                         </div>
                     </div>
 
-                    <div class="form-row">
+                    <div class="grid-2">
                         <div class="form-group">
                             <label>Category</label>
                             <select name="categoryId" required>
-                                <option value="">-- Select Collection --</option>
+                                <option value="">-- Select Category --</option>
                                 <c:forEach var="category" items="${categories}">
                                     <option value="${category.id}">${category.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
+
                         <div class="form-group">
                             <label>High-Res Image URL</label>
                             <input type="text" name="imageUrl" placeholder="https://...">
@@ -118,8 +116,6 @@
 
                     <button type="submit" class="btn-submit">Publish Product</button>
                 </form>
-
-                <a href="/products" class="back-link"><i class="fas fa-arrow-left"></i> Return to Inventory</a>
             </div>
         </div>
     </main>

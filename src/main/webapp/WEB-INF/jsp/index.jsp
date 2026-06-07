@@ -12,14 +12,9 @@
     <style>
         /* === LUXURY VARIABLES === */
         :root {
-            --bg-white: #ffffff;
-            --bg-cream: #faf9f7;
-            --text-dark: #111111;
-            --text-gray: #666666;
-            --icon-light: #444444;
-            --brand-color: #7b1e2e;
-            --gold-accent: #cda53f;
-            --border-light: #eaeaea;
+            --bg-white: #ffffff; --bg-cream: #faf9f7; --text-dark: #111111;
+            --text-gray: #666666; --icon-light: #444444; --brand-color: #7b1e2e;
+            --gold-accent: #cda53f; --border-light: #eaeaea;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,13 +25,11 @@
         ul { list-style: none; }
         button { font-family: 'Jost', sans-serif; cursor: pointer; outline: none; border: none; background: none; }
 
-        /* === SLEEK SCROLLBAR === */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-cream); }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* === PREMIUM SCROLL ANIMATIONS === */
         .reveal-up { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.25, 1, 0.5, 1); }
         .reveal-up.active { opacity: 1; transform: translateY(0); }
         .reveal-zoom { opacity: 0; transform: scale(0.95); transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1); }
@@ -51,12 +44,14 @@
         .search-box { flex-grow: 1; max-width: 500px; margin: 0 40px; position: relative; }
         .search-box input { width: 100%; padding: 14px 20px 14px 45px; border-radius: 30px; border: 1px solid var(--border-light); background: #f9f9f9; outline: none; transition: 0.4s; font-size: 13px; }
         .search-box input:focus { border-color: var(--gold-accent); background: white; box-shadow: 0 0 20px rgba(205, 165, 63, 0.08); }
-        .search-box i.fa-search { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--icon-light); }
+        .search-box i.fa-search { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--icon-light); cursor: pointer; transition: 0.3s; }
+        .search-box i.fa-search:hover { color: var(--brand-color); }
 
         .header-actions { display: flex; gap: 30px; align-items: flex-end; }
         .action-item { position: relative; display: flex; flex-direction: column; align-items: center; font-size: 14px; color: #333; transition: 0.3s; font-weight: 500; padding-bottom: 10px; margin-bottom: -10px; }
         .action-item i { font-size: 24px; margin-bottom: 5px; color: var(--icon-light); transition: 0.3s; font-weight: 900; }
         .action-item:hover, .action-item:hover i { color: var(--brand-color); }
+
         .cart-count { position: absolute; top: -6px; right: -8px; background: var(--brand-color); color: white; font-size: 10px; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-weight: 600; }
 
         .profile-dropdown-container { position: relative; cursor: pointer; }
@@ -73,10 +68,11 @@
         .profile-dropdown a:last-child { border-bottom: none; }
         .profile-dropdown a:hover { color: var(--brand-color); background: var(--bg-cream); }
 
-        .nav-tabs { display: flex; justify-content: center; gap: 50px; padding: 20px 20px; background: var(--bg-white); border-bottom: 1px solid var(--border-light); flex-wrap: wrap; }
+        .nav-tabs { display: flex; justify-content: center; align-items: center; gap: 40px; padding: 20px 20px; background: var(--bg-white); border-bottom: 1px solid var(--border-light); flex-wrap: wrap; }
         .nav-item { font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 2px; color: var(--text-dark); position: relative; padding-bottom: 5px; cursor: pointer; }
         .nav-item::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: var(--brand-color); transition: 0.4s ease; }
-        .nav-item:hover::after { width: 100%; }
+        .nav-item:hover::after, .nav-item.active::after { width: 100%; }
+        .nav-item.active { color: var(--brand-color); }
 
         /* === INTERACTIVE HERO SLIDER === */
         .hero-slider { position: relative; width: 100%; height: 80vh; overflow: hidden; background: #000; }
@@ -109,28 +105,20 @@
         .cf-container { position: relative; width: 100%; height: 480px; display: flex; justify-content: center; align-items: center; perspective: 1200px; overflow: visible; }
 
         .cf-item { position: absolute; width: 260px; height: 420px; background: white; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 20px; border: 1px solid var(--border-light); z-index: 0; cursor: pointer; opacity: 0; pointer-events: none; }
-
-        /* Fixed Aspect Ratio Images */
         .cf-item .img-wrapper { width: 100%; height: 220px; overflow: hidden; border-radius: 6px; margin-bottom: 15px; }
         .cf-item .img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-
         .cf-item h3 { font-size: 15px; color: var(--text-dark); margin-bottom: 5px; text-align: center; }
         .cf-item p { font-size: 17px; color: var(--brand-color); font-weight: 600; font-family: 'Playfair Display', serif; }
         .cf-item .btn-main { width: 100%; padding: 10px; font-size: 10px; margin-top: 10px; background: var(--bg-cream); color: var(--text-dark); border-color: var(--border-light); }
 
-        /* Seamless Slider Map - Expanded for 10 cards */
         .cf-item.active { transform: translateX(0) scale(1.1); z-index: 10; opacity: 1; pointer-events: auto; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15); border-color: var(--gold-accent); }
         .cf-item.active .btn-main { background: var(--brand-color); color: white; border-color: var(--brand-color); }
-
         .cf-item.prev { transform: translateX(-160px) scale(0.9); z-index: 9; opacity: 0.95; pointer-events: auto; }
         .cf-item.next { transform: translateX(160px) scale(0.9); z-index: 9; opacity: 0.95; pointer-events: auto; }
-
         .cf-item.prev-2 { transform: translateX(-290px) scale(0.75); z-index: 8; opacity: 0.8; pointer-events: auto; }
         .cf-item.next-2 { transform: translateX(290px) scale(0.75); z-index: 8; opacity: 0.8; pointer-events: auto; }
-
         .cf-item.prev-3 { transform: translateX(-400px) scale(0.6); z-index: 7; opacity: 0.5; pointer-events: auto; }
         .cf-item.next-3 { transform: translateX(400px) scale(0.6); z-index: 7; opacity: 0.5; pointer-events: auto; }
-
         .cf-item.prev-4 { transform: translateX(-490px) scale(0.45); z-index: 6; opacity: 0.2; }
         .cf-item.next-4 { transform: translateX(490px) scale(0.45); z-index: 6; opacity: 0.2; }
 
@@ -153,40 +141,41 @@
         .panel-btn { padding: 10px 20px; border: 1px solid white; color: white; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; transition: 0.3s; }
         .panel-btn:hover { background: white; color: black; }
 
-        /* === PRODUCTS & CATEGORIES === */
+        /* === PRODUCTS & CATEGORIES (UPGRADED LUXURY CARDS) === */
         .section-container { padding: 80px 50px; max-width: 1400px; margin: 0 auto; text-align: center; }
         .section-title { font-size: 40px; color: var(--text-dark); margin-bottom: 25px; }
 
         .filter-bar { display: flex; justify-content: center; margin-bottom: 50px; padding: 20px 0; border-bottom: 1px solid var(--border-light); border-top: 1px solid var(--border-light); }
         .filter-tabs { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; }
-        .filter-tab { font-size: 12px; text-transform: uppercase; font-weight: 500; letter-spacing: 1px; color: var(--text-gray); transition: 0.3s; cursor: pointer; }
-        .filter-tab.active, .filter-tab:hover { color: var(--brand-color); }
+        .filter-tab { font-size: 12px; text-transform: uppercase; font-weight: 500; letter-spacing: 1px; color: var(--text-gray); transition: 0.3s; cursor: pointer; padding-bottom: 5px; border-bottom: 2px solid transparent; }
+        .filter-tab.active, .filter-tab:hover { color: var(--brand-color); border-bottom-color: var(--brand-color); }
 
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; text-align: left; }
-        .product-card { background: white; transition: 0.5s; position: relative; overflow: hidden; border: 1px solid transparent; display: none; }
-        .product-card:hover { box-shadow: 0 15px 40px rgba(0,0,0,0.08); border-color: var(--border-light); transform: translateY(-5px); }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 35px; text-align: left; }
 
-        /* UNIFORM IMAGES FIX */
-        .img-wrap { height: 380px; position: relative; overflow: hidden; cursor: pointer; background: var(--bg-cream); display: block; }
-        .slider-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.6s ease-in-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; }
+        .product-card { background: white; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); position: relative; overflow: hidden; border: 1px solid var(--border-light); border-radius: 8px; display: none; }
+        .product-card:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: var(--gold-accent); transform: translateY(-8px); }
+
+        .img-wrap { height: 320px; position: relative; overflow: hidden; cursor: pointer; background: #fdfdfd; display: block; padding: 20px; }
+        .slider-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 0.6s ease-in-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1; padding: 20px; mix-blend-mode: multiply; }
         .slider-img.active { opacity: 1; z-index: 2; }
         .product-card:hover .slider-img.active { transform: scale(1.08); }
 
-        .img-wrap::after { content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); transition: 0.7s ease-in-out; z-index: 3; pointer-events: none; }
-        .product-card:hover .img-wrap::after { left: 150%; }
+        .wishlist-btn-small { position: absolute; top: 15px; right: 15px; z-index: 5; background: white; border: 1px solid var(--border-light); border-radius: 50%; width: 35px; height: 35px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; color: #ccc; transition: 0.3s; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .wishlist-btn-small:hover { color: var(--brand-color); border-color: var(--brand-color); transform: scale(1.1); }
+        .wishlist-btn-small.active { color: var(--brand-color); background: #fff5f5; border-color: var(--brand-color); }
 
         .card-actions { position: absolute; bottom: -60px; left: 0; width: 100%; padding: 15px; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); display: flex; gap: 10px; transition: bottom 0.4s cubic-bezier(0.25, 1, 0.5, 1); border-top: 1px solid var(--border-light); z-index: 4; }
         .product-card:hover .card-actions { bottom: 0; }
 
-        .prod-info { padding: 25px 10px 10px; text-align: center; }
-        .prod-price { font-size: 22px; font-weight: 600; color: var(--brand-color); margin-bottom: 8px; font-family: 'Playfair Display', serif; }
-        .prod-name { font-size: 14px; color: #666; letter-spacing: 0.5px; }
+        .prod-info { padding: 20px 25px 25px; text-align: center; background: white; border-top: 1px solid var(--border-light); }
+        .prod-price { font-size: 20px; font-weight: 600; color: var(--brand-color); margin-bottom: 6px; font-family: 'Playfair Display', serif; }
+        .prod-name { font-size: 12px; color: #555; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .btn-outline { flex: 1; padding: 12px; border: 1px solid var(--brand-color); color: var(--brand-color); background: transparent; text-transform: uppercase; font-size: 11px; font-weight: 600; letter-spacing: 1px; transition: 0.3s; text-align: center; cursor: pointer; }
+        .btn-outline { flex: 1; padding: 12px; border: 1px solid var(--brand-color); color: var(--brand-color); background: transparent; text-transform: uppercase; font-size: 11px; font-weight: 600; letter-spacing: 1px; transition: 0.3s; text-align: center; cursor: pointer; border-radius: 4px; }
         .btn-outline:hover { background: var(--brand-color); color: white; }
 
-        .pagination { display: flex; justify-content: center; gap: 15px; margin-top: 60px; }
-        .page-link { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-light); color: var(--text-dark); transition: 0.4s; border-radius: 50%; font-size: 14px; cursor: pointer; }
+        .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 60px; }
+        .page-link { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-light); color: var(--text-dark); transition: 0.4s; border-radius: 4px; font-size: 14px; cursor: pointer; background: white; }
         .page-link.active, .page-link:hover:not(:disabled) { background: var(--brand-color); color: white; border-color: var(--brand-color); }
         .page-link:disabled { opacity: 0.3; cursor: not-allowed; }
 
@@ -216,7 +205,7 @@
         .review-btn-left { left: 10px; }
         .review-btn-right { right: 10px; }
 
-        /* === MODALS (QUICK VIEW & JOURNEY) === */
+        /* === MODALS === */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; opacity: 0; visibility: hidden; transition: 0.4s; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content { background: white; width: 900px; max-width: 95%; height: 60vh; display: flex; position: relative; transform: scale(0.95); opacity: 0; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 10px; overflow: hidden;}
@@ -230,7 +219,6 @@
         .wishlist-btn:hover { border-color: var(--brand-color); color: var(--brand-color); }
         .wishlist-btn.active { background: var(--brand-color); color: white; border-color: var(--brand-color); }
 
-        /* Journey Modal Specific */
         #journeyModal .modal-content { width: 800px; height: 80vh; flex-direction: column; padding: 50px; overflow-y: auto; background: var(--bg-cream); }
         .timeline { border-left: 2px solid var(--gold-accent); padding-left: 30px; margin-top: 30px; margin-left: 20px; }
         .timeline-item { position: relative; margin-bottom: 40px; }
@@ -238,7 +226,7 @@
         .timeline-year { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--gold-accent); margin-bottom: 10px; font-weight: 600; }
         .timeline-text { font-size: 15px; color: var(--text-gray); line-height: 1.7; }
 
-        /* === FOOTER (OPTIMIZED) === */
+        /* === FOOTER === */
         .footer { background: #041527; color: white; padding: 45px 50px 20px; font-family: 'Jost', sans-serif; }
         .footer-grid { display: grid; grid-template-columns: 1.5fr 1.5fr 1.5fr 2fr; gap: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 30px; margin-bottom: 20px; max-width: 1400px; margin-left: auto; margin-right: auto; }
         .footer-col h4 { font-size: 13px; font-weight: 600; margin-bottom: 15px; letter-spacing: 0.5px; color: #ffffff; text-transform: uppercase; }
@@ -256,110 +244,82 @@
         .contact-group h4 { margin-bottom: 12px; }
 
         .footer-bottom { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 20px; padding-top: 10px; }
-
         .social-horizontal-container { display: flex; align-items: center; gap: 20px; }
         .social-horizontal-container > span { color: #d1d5db; font-size: 14px; font-weight: 500; letter-spacing: 1px; }
         .social-icons-row { display: flex; flex-direction: row; gap: 12px; }
         .social-icons-row a { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: white; color: #041527; border-radius: 50%; font-size: 14px; transition: 0.3s; }
         .social-icons-row a:hover { transform: scale(1.1); background: var(--gold-accent); color: white; }
-
         .payment-row { display: flex; align-items: center; gap: 10px; color: #d1d5db; font-size: 12px; margin-bottom: 10px; justify-content: flex-end; }
         .payment-row img { height: 24px; border-radius: 3px; }
         .copyright-text { text-align: right; color: #8892b0; font-size: 12px; line-height: 1.5; }
-
-        /* === RESPONSIVE === */
-        @media (max-width: 1024px) {
-            .header-main { padding: 15px 30px; flex-wrap: wrap; }
-            .search-box { order: 3; width: 100%; max-width: 100%; margin: 15px 0 0 0; }
-            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
-            .video-accordion { flex-direction: column; height: 900px; }
-        }
-
-        @media (max-width: 768px) {
-            .brand-logo { font-size: 24px; }
-            .header-actions { gap: 15px; }
-            .action-item span { display: none; }
-            .nav-tabs { gap: 15px; padding: 15px; }
-            .nav-item { font-size: 10px; }
-            .hero-slider { height: 60vh; }
-            .slide-content h2 { font-size: 32px; }
-            .cf-item { width: 220px; height: 340px; }
-            .cf-item .img-wrapper { height: 160px; }
-            .cf-btn { display: none; }
-            .section-container, .video-showcase { padding: 50px 20px; }
-            .product-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-            .rope-wrapper { padding: 0 20px; }
-            .review-btn { display: none; }
-            .footer-grid { grid-template-columns: 1fr; gap: 30px; }
-            .footer-bottom { flex-direction: column; align-items: center; text-align: center; }
-            .social-horizontal-container { flex-direction: column; margin-bottom: 20px; }
-            .payment-row { justify-content: center; }
-            .copyright-text { text-align: center; margin-top: 10px; }
-            .modal-content { flex-direction: column; height: 85vh; overflow-y: auto; }
-        }
     </style>
 </head>
 <body>
 
-    <div class="utility-bar">
-        ${not empty applicationScope.adminHeaderText ? applicationScope.adminHeaderText : 'Free Insured Shipping Across India | 100% Certified Jewellery'}
-    </div>
-
-    <header class="header-main" id="navbar">
-        <a href="/" class="brand-logo serif-font">SHADOW & CUT</a>
-
-        <div class="search-box">
-            <form onsubmit="handleSearch(event)">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Search for Gold Rings, Diamond Pendants...">
-            </form>
+    <c:if test="${applicationScope.emergencyClose == true}">
+        <div style="background: #dc3545; color: white; text-align: center; padding: 15px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; z-index: 9999; position: relative; font-size: 13px;">
+            <i class="fas fa-exclamation-triangle"></i> STORE IS CURRENTLY CLOSED FOR MAINTENANCE. CHECKOUT IS TEMPORARILY DISABLED.
         </div>
+        <style> .btn-main, .btn-outline { pointer-events: none; opacity: 0.5; cursor: not-allowed; } </style>
+    </c:if>
 
-        <div class="header-actions">
-            <a href="/stores" class="action-item"><i class="fas fa-location-dot"></i><span>Stores</span></a>
-            <a href="/wishlist" class="action-item"><i class="fas fa-heart"></i><span>Wishlist</span></a>
-
-            <div class="action-item profile-dropdown-container">
-                <i class="fas fa-user"></i><span>Profile</span>
-                <div class="profile-dropdown">
-                    <c:choose>
-                        <c:when test="${not empty sessionScope.loggedInUser}">
-                            <div style="padding: 10px 20px; font-size: 11px; color: var(--brand-color); border-bottom: 1px solid var(--border-light); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: var(--bg-cream);">
-                                Hi, ${sessionScope.loggedInUser.fullName}
-                            </div>
-
-                            <c:if test="${sessionScope.loggedInUser.role == 'ADMIN'}">
-                                <a href="/admin/dashboard" style="color: #d9534f; font-weight: 600;"><i class="fas fa-shield-alt" style="margin-right: 5px; font-size: 12px;"></i> Admin Panel</a>
-                            </c:if>
-
-                            <a href="/profile">My Account</a>
-                            <a href="/orders">My Orders</a>
-                            <a href="/logout">Logout</a>
-                        </c:when>
-
-                        <c:otherwise>
-                            <a href="/login">Login</a>
-                            <a href="/register">Signup</a>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </div>
-
-            <a href="/cart" class="action-item">
-                <div style="position: relative;">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span class="cart-count">${not empty sessionScope.cart ? sessionScope.cart.size() : '0'}</span>
-                </div>
-                <span>Cart</span>
-            </a>
+    <c:if test="${applicationScope.showAnnouncement == null || applicationScope.showAnnouncement == true}">
+        <div class="utility-bar">
+            ${not empty applicationScope.announcementText ? applicationScope.announcementText : 'Free Insured Shipping Across India | 100% Certified Jewellery'}
         </div>
-    </header>
+    </c:if>
+
+   <header class="header-main" id="navbar">
+       <a href="/" class="brand-logo serif-font">SHADOW & CUT</a>
+
+       <div class="search-box">
+           <form id="searchForm" onsubmit="handleSearch(event)" style="width: 100%; position: relative;">
+               <i class="fas fa-search" onclick="document.getElementById('searchForm').dispatchEvent(new Event('submit'))"></i>
+               <input type="text" id="searchInput" placeholder="Search by name or category...">
+           </form>
+       </div>
+
+       <div class="header-actions">
+           <a href="/stores" class="action-item"><i class="fas fa-location-dot"></i><span>Stores</span></a>
+           <a href="/wishlist" class="action-item"><i class="fas fa-heart"></i><span>Wishlist</span></a>
+
+           <div class="action-item profile-dropdown-container">
+               <i class="fas fa-user"></i><span>Profile</span>
+               <div class="profile-dropdown">
+                   <c:choose>
+                       <c:when test="${not empty sessionScope.loggedInUser}">
+                           <div style="padding: 10px 20px; font-size: 11px; color: var(--brand-color); border-bottom: 1px solid var(--border-light); font-weight: 600; text-transform: uppercase; background: var(--bg-cream);">
+                               Hi, ${sessionScope.loggedInUser.fullName}
+                           </div>
+                           <a href="/profile">My Account</a>
+                           <a href="/orders">My Orders</a>
+                           <a href="/logout">Logout</a>
+                       </c:when>
+                       <c:otherwise>
+                           <a href="/login">Login</a>
+                           <a href="/register">Signup</a>
+                       </c:otherwise>
+                   </c:choose>
+               </div>
+           </div>
+
+           <a href="/cart" class="action-item">
+               <div style="position: relative;">
+                   <i class="fas fa-shopping-bag"></i>
+                   <span id="cart-count-badge" class="cart-count">${not empty sessionScope.cart ? sessionScope.cart.size() : '0'}</span>
+               </div>
+               <span>Cart</span>
+           </a>
+       </div>
+   </header>
 
     <nav class="nav-tabs">
-        <a class="nav-item filter-trigger" data-filter="all" onclick="filterCategory('all')">All Jewellery</a>
-        <a class="nav-item filter-trigger" data-filter="gold" onclick="filterCategory('gold')">Gold</a>
-        <a class="nav-item filter-trigger" data-filter="diamond" onclick="filterCategory('diamond')">Diamond</a>
-        <a class="nav-item filter-trigger" data-filter="ring" onclick="filterCategory('ring')">Rings</a>
+        <a class="nav-item filter-trigger active" data-filter="all" onclick="filterCategory('all')">All Jewellery</a>
+        <c:if test="${not empty categories}">
+            <c:forEach var="category" items="${categories}">
+                <a class="nav-item filter-trigger" data-filter="${category.name.toLowerCase()}" onclick="filterCategory('${category.name.toLowerCase()}')">${category.name}</a>
+            </c:forEach>
+        </c:if>
         <a href="#about-us" class="nav-item">About Us</a>
     </nav>
 
@@ -369,21 +329,21 @@
 
         <div class="slide active">
             <video class="slide-video" autoplay muted loop playsinline>
-                <source src="https://cdn.pixabay.com/video/2021/08/25/86259-592868735_large.mp4" type="video/mp4">
+                <source src="${not empty applicationScope.slide1_media ? applicationScope.slide1_media : 'https://cdn.pixabay.com/video/2021/08/25/86259-592868735_large.mp4'}" type="video/mp4">
             </video>
             <div class="slide-content">
-                <h2 class="serif-font">The Bridal Masterpiece</h2>
-                <p style="color: var(--text-gray); margin-bottom: 30px;">Exquisite craftsmanship for your most special day. Certified gold and diamonds forged into perfection.</p>
-                <a onclick="filterCategory('bridal')" class="btn-main">Explore Collection</a>
+                <h2 class="serif-font">${not empty applicationScope.slide1_heading ? applicationScope.slide1_heading : 'The Bridal Masterpiece'}</h2>
+                <p style="color: var(--text-gray); margin-bottom: 30px;">${not empty applicationScope.slide1_desc ? applicationScope.slide1_desc : 'Exquisite craftsmanship for your most special day. Certified gold and diamonds forged into perfection.'}</p>
+                <a onclick="document.getElementById('collection-section').scrollIntoView({ behavior: 'smooth' });" class="btn-main">Explore Collection</a>
             </div>
         </div>
 
         <div class="slide">
-            <img src="https://images.unsplash.com/photo-1599643478524-fb66f70d00f7?q=100&w=2800&auto=format&fit=crop" class="slide-bg">
+            <img src="${not empty applicationScope.slide2_media ? applicationScope.slide2_media : 'https://images.unsplash.com/photo-1599643478524-fb66f70d00f7?q=100&w=2800&auto=format&fit=crop'}" class="slide-bg">
             <div class="slide-content">
-                <h2 class="serif-font">Diamond Elegance</h2>
-                <p style="color: var(--text-gray); margin-bottom: 30px;">Discover our latest arrivals in pure diamond settings. Crafted for the modern silhouette.</p>
-                <a onclick="filterCategory('diamond')" class="btn-main">Shop Diamonds</a>
+                <h2 class="serif-font">${not empty applicationScope.slide2_heading ? applicationScope.slide2_heading : 'Diamond Elegance'}</h2>
+                <p style="color: var(--text-gray); margin-bottom: 30px;">${not empty applicationScope.slide2_desc ? applicationScope.slide2_desc : 'Discover our latest arrivals in pure diamond settings. Crafted for the modern silhouette.'}</p>
+                <a onclick="document.getElementById('collection-section').scrollIntoView({ behavior: 'smooth' });" class="btn-main">Shop Diamonds</a>
             </div>
         </div>
 
@@ -400,66 +360,21 @@
             <button class="cf-btn left" onclick="autoMoveCoverflow(-1)"><i class="fas fa-chevron-left"></i></button>
 
             <div class="cf-container" id="coverflow">
-                <div class="cf-item" onclick="filterCategory('diamond')">
-                    <div class="img-wrapper"><img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop" alt="Earrings"></div>
-                    <h3 class="serif-font">Diamond Drop Earrings</h3>
-                    <p>₹ 34,000</p>
-                    <button type="button" class="btn-main">View in Collection</button>
-                </div>
-                <div class="cf-item" onclick="filterCategory('gold')">
-                    <div class="img-wrapper"><img src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=600&auto=format&fit=crop" alt="Necklace"></div>
-                    <h3 class="serif-font">Bridal Gold Necklace</h3>
-                    <p>₹ 1,12,000</p>
-                    <button type="button" class="btn-main">View in Collection</button>
-                </div>
-                <div class="cf-item" onclick="filterCategory('ring')">
-                    <div class="img-wrapper"><img src="https://images.unsplash.com/photo-1605100804763-247f66126e28?q=80&w=600&auto=format&fit=crop" alt="Ring"></div>
-                    <h3 class="serif-font">Platinum Solitaire Ring</h3>
-                    <p>₹ 45,500</p>
-                    <button type="button" class="btn-main">View in Collection</button>
-                </div>
-                <div class="cf-item" onclick="filterCategory('gold')">
-                    <div class="img-wrapper"><img src="https://images.unsplash.com/photo-1599643478514-41d3b0704040?q=80&w=600&auto=format&fit=crop" alt="Bangle"></div>
-                    <h3 class="serif-font">Kundan Gold Bangle</h3>
-                    <p>₹ 85,000</p>
-                    <button type="button" class="btn-main">View in Collection</button>
-                </div>
-                <div class="cf-item" onclick="filterCategory('diamond')">
-                    <div class="img-wrapper"><img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=600&auto=format&fit=crop" alt="Pendant"></div>
-                    <h3 class="serif-font">Minimalist Pendant</h3>
-                    <p>₹ 22,500</p>
-                    <button type="button" class="btn-main">View in Collection</button>
-                </div>
-                <div class="cf-item" onclick="filterCategory('ring')">
-                    <div class="img-wrapper"><img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=600&auto=format&fit=crop" alt="Emerald Ring"></div>
-                    <h3 class="serif-font">Emerald Cut Ring</h3>
-                    <p>₹ 68,000</p>
-                    <button type="button" class="btn-main">View in Collection</button>
-                </div>
-                <div class="cf-item" onclick="filterCategory('gold')">
-                    <div class="img-wrapper"><img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600&auto=format&fit=crop" alt="Gold Chain"></div>
-                    <h3 class="serif-font">22Kt Linked Gold Chain</h3>
-                    <p>₹ 55,000</p>
-                    <button type="button" class="btn-main">View in Collection</button>
-                </div>
-                <div class="cf-item" onclick="filterCategory('diamond')">
-                    <div class="img-wrapper"><img src="https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?q=80&w=600&auto=format&fit=crop" alt="Diamond Bracelet"></div>
-                    <h3 class="serif-font">Tennis Diamond Bracelet</h3>
-                    <p>₹ 1,45,000</p>
-                    <button type="button" class="btn-main">View in Collection</button>
-                </div>
-                <div class="cf-item" onclick="filterCategory('gold')">
-                    <div class="img-wrapper"><img src="https://images.unsplash.com/photo-1610662243654-e0eb36355655?q=80&w=600&auto=format&fit=crop" alt="Pearl Drop"></div>
-                    <h3 class="serif-font">Gold & Pearl Jhumka</h3>
-                    <p>₹ 42,000</p>
-                    <button type="button" class="btn-main">View in Collection</button>
-                </div>
-                <div class="cf-item" onclick="filterCategory('ring')">
-                    <div class="img-wrapper"><img src="https://images.unsplash.com/photo-1589156229687-496a31ad1d1f?q=80&w=600&auto=format&fit=crop" alt="Mens Band"></div>
-                    <h3 class="serif-font">Classic Platinum Band</h3>
-                    <p>₹ 30,000</p>
-                    <button type="button" class="btn-main">View in Collection</button>
-                </div>
+                <c:choose>
+                    <c:when test="${not empty products}">
+                        <c:forEach var="product" items="${products}" end="9">
+                            <div class="cf-item" onclick="filterCategory('${product.category.name.toLowerCase()}')">
+                                <div class="img-wrapper"><img src="${product.imageUrl}" alt="${product.name}"></div>
+                                <h3 class="serif-font">${product.name}</h3>
+                                <p>₹ ${product.price}</p>
+                                <button type="button" class="btn-main" onclick="event.stopPropagation(); document.getElementById('collection-section').scrollIntoView({ behavior: 'smooth' });">View Collection</button>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <p style="color: var(--text-gray);">Uploading our top picks soon...</p>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
             <button class="cf-btn right" onclick="autoMoveCoverflow(1)"><i class="fas fa-chevron-right"></i></button>
@@ -472,27 +387,24 @@
 
         <div class="video-accordion">
             <div class="video-panel">
-                <video autoplay muted loop playsinline src="https://res.cloudinary.com/dq3omqbjo/video/upload/q_auto/f_auto/v1780766925/Cinematic_macro_slow_motion_sh_processed_ch1rhq.mp4"></video>
+                <video autoplay muted loop playsinline src="${not empty applicationScope.video1_url ? applicationScope.video1_url : 'https://res.cloudinary.com/dq3omqbjo/video/upload/q_auto/f_auto/v1780766925/Cinematic_macro_slow_motion_sh_processed_ch1rhq.mp4'}"></video>
                 <div class="panel-content">
-                    <h3 class="serif-font">Aura Rings</h3>
+                    <h3 class="serif-font">${not empty applicationScope.video1_heading ? applicationScope.video1_heading : 'Aura Rings'}</h3>
                     <p>Witness the dazzling cut and clarity of our signature engagement rings in natural light.</p>
-                    <button onclick="filterCategory('ring')" class="panel-btn">Shop Rings</button>
                 </div>
             </div>
             <div class="video-panel">
-                <video autoplay muted loop playsinline src="https://res.cloudinary.com/dq3omqbjo/video/upload/q_auto/f_auto/v1780767017/Close_up_lifestyle_shot_of_a_w_processed_w0zmdu.mp4"></video>
+                <video autoplay muted loop playsinline src="${not empty applicationScope.video2_url ? applicationScope.video2_url : 'https://res.cloudinary.com/dq3omqbjo/video/upload/q_auto/f_auto/v1780767017/Close_up_lifestyle_shot_of_a_w_processed_w0zmdu.mp4'}"></video>
                 <div class="panel-content">
-                    <h3 class="serif-font">Royal Necklaces</h3>
+                    <h3 class="serif-font">${not empty applicationScope.video2_heading ? applicationScope.video2_heading : 'Royal Necklaces'}</h3>
                     <p>Feel the weight and drape of pure 22Kt gold adorning the neckline.</p>
-                    <button onclick="filterCategory('gold')" class="panel-btn">Shop Necklaces</button>
                 </div>
             </div>
             <div class="video-panel">
-                <video autoplay muted loop playsinline src="https://res.cloudinary.com/dq3omqbjo/video/upload/v1780766841/Macro_shot_of_black_diamonds_a_processed_si6sgq.mp4"></video>
+                <video autoplay muted loop playsinline src="${not empty applicationScope.video3_url ? applicationScope.video3_url : 'https://res.cloudinary.com/dq3omqbjo/video/upload/v1780766841/Macro_shot_of_black_diamonds_a_processed_si6sgq.mp4'}"></video>
                 <div class="panel-content">
-                    <h3 class="serif-font">Bridal Sets</h3>
+                    <h3 class="serif-font">${not empty applicationScope.video3_heading ? applicationScope.video3_heading : 'Bridal Sets'}</h3>
                     <p>The perfect matching sets designed to make your special day truly unforgettable.</p>
-                    <button onclick="filterCategory('bridal')" class="panel-btn">Shop Bridal</button>
                 </div>
             </div>
         </div>
@@ -504,9 +416,11 @@
         <div class="filter-bar">
             <div class="filter-tabs">
                 <div class="filter-tab active filter-trigger" data-filter="all" onclick="filterCategory('all')">All Pieces</div>
-                <div class="filter-tab filter-trigger" data-filter="gold" onclick="filterCategory('gold')">Gold</div>
-                <div class="filter-tab filter-trigger" data-filter="diamond" onclick="filterCategory('diamond')">Diamond</div>
-                <div class="filter-tab filter-trigger" data-filter="ring" onclick="filterCategory('ring')">Rings</div>
+                <c:if test="${not empty categories}">
+                    <c:forEach var="category" items="${categories}">
+                        <div class="filter-tab filter-trigger" data-filter="${category.name.toLowerCase()}" onclick="filterCategory('${category.name.toLowerCase()}')">${category.name}</div>
+                    </c:forEach>
+                </c:if>
             </div>
         </div>
 
@@ -516,113 +430,42 @@
         </div>
 
         <div class="product-grid" id="paginated-products">
-            <div class="product-card" data-category="gold diamond ring">
-                <div class="img-wrap hover-slider" onclick="openQuickView('18Kt Yellow Gold & Diamond Solitaire', '₹ 45,500', 'https://images.unsplash.com/photo-1605100804763-247f66126e28?q=80&w=600&auto=format&fit=crop', '1')">
-                    <img src="https://images.unsplash.com/photo-1605100804763-247f66126e28?q=80&w=600&auto=format&fit=crop" class="slider-img active" alt="Ring 1">
-                    <img src="https://images.unsplash.com/photo-1599643478524-fb66f70d00f7?q=80&w=600&auto=format&fit=crop" class="slider-img" alt="Ring 2">
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="event.stopPropagation(); openQuickView('18Kt Yellow Gold & Diamond Solitaire', '₹ 45,500', 'https://images.unsplash.com/photo-1605100804763-247f66126e28?q=80&w=600&auto=format&fit=crop', '1')">Quick View</button>
-                        <form action="/cart/add" method="POST" style="flex:1;">
-                            <input type="hidden" name="productId" value="1">
-                            <button type="submit" class="btn-outline" style="background: var(--brand-color); color: white;" onclick="event.stopPropagation();">Add to Cart</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="prod-info">
-                    <div class="prod-price">₹ 45,500</div>
-                    <div class="prod-name">18Kt Yellow Gold & Diamond Solitaire</div>
-                </div>
-            </div>
+            <c:choose>
+                <c:when test="${not empty products}">
+                    <c:forEach var="product" items="${products}">
+                        <div class="product-card" data-category="${product.category.name.toLowerCase()}">
+                            <div class="img-wrap hover-slider" onclick="openQuickView('${product.name}', '₹ ${product.price}', '${product.imageUrl}', '${product.id}')">
 
-            <div class="product-card" data-category="gold bridal">
-                <div class="img-wrap hover-slider" onclick="openQuickView('22Kt Traditional Gold Bridal Necklace', '₹ 1,12,000', 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=600&auto=format&fit=crop', '2')">
-                    <img src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=600&auto=format&fit=crop" class="slider-img active" alt="Necklace 1">
-                    <img src="https://images.unsplash.com/photo-1599643478514-41d3b0704040?q=80&w=600&auto=format&fit=crop" class="slider-img" alt="Necklace 2">
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="event.stopPropagation(); openQuickView('22Kt Traditional Gold Bridal Necklace', '₹ 1,12,000', 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=600&auto=format&fit=crop', '2')">Quick View</button>
-                        <form action="/cart/add" method="POST" style="flex:1;">
-                            <input type="hidden" name="productId" value="2">
-                            <button type="submit" class="btn-outline" style="background: var(--brand-color); color: white;" onclick="event.stopPropagation();">Add to Cart</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="prod-info">
-                    <div class="prod-price">₹ 1,12,000</div>
-                    <div class="prod-name">22Kt Traditional Gold Bridal Necklace</div>
-                </div>
-            </div>
+                                <button class="wishlist-btn-small" onclick="event.stopPropagation(); this.classList.toggle('active');">
+                                    <i class="fas fa-heart"></i>
+                                </button>
 
-            <div class="product-card" data-category="diamond">
-                <div class="img-wrap hover-slider" onclick="openQuickView('Rose Gold Diamond Drop Earrings', '₹ 34,000', 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop', '3')">
-                    <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop" class="slider-img active" alt="Earrings 1">
-                    <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=600&auto=format&fit=crop" class="slider-img" alt="Earrings 2">
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="event.stopPropagation(); openQuickView('Rose Gold Diamond Drop Earrings', '₹ 34,000', 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop', '3')">Quick View</button>
-                        <form action="/cart/add" method="POST" style="flex:1;">
-                            <input type="hidden" name="productId" value="3">
-                            <button type="submit" class="btn-outline" style="background: var(--brand-color); color: white;" onclick="event.stopPropagation();">Add to Cart</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="prod-info">
-                    <div class="prod-price">₹ 34,000</div>
-                    <div class="prod-name">Rose Gold Diamond Drop Earrings</div>
-                </div>
-            </div>
+                                <img src="${product.imageUrl}" class="slider-img active" alt="${product.name}">
 
-            <div class="product-card" data-category="gold">
-                <div class="img-wrap hover-slider" onclick="openQuickView('Kundan Studded Gold Bangle', '₹ 85,000', 'https://images.unsplash.com/photo-1599643478514-41d3b0704040?q=80&w=600&auto=format&fit=crop', '4')">
-                    <img src="https://images.unsplash.com/photo-1599643478514-41d3b0704040?q=80&w=600&auto=format&fit=crop" class="slider-img active" alt="Bangle 1">
-                    <img src="https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=600&auto=format&fit=crop" class="slider-img" alt="Bangle 2">
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="event.stopPropagation(); openQuickView('Kundan Studded Gold Bangle', '₹ 85,000', 'https://images.unsplash.com/photo-1599643478514-41d3b0704040?q=80&w=600&auto=format&fit=crop', '4')">Quick View</button>
-                        <form action="/cart/add" method="POST" style="flex:1;">
-                            <input type="hidden" name="productId" value="4">
-                            <button type="submit" class="btn-outline" style="background: var(--brand-color); color: white;" onclick="event.stopPropagation();">Add to Cart</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="prod-info">
-                    <div class="prod-price">₹ 85,000</div>
-                    <div class="prod-name">Kundan Studded Gold Bangle</div>
-                </div>
-            </div>
+                                <div class="card-actions">
+                                    <button class="btn-outline" onclick="event.stopPropagation(); openQuickView('${product.name}', '₹ ${product.price}', '${product.imageUrl}', '${product.id}')">Quick View</button>
 
-            <div class="product-card" data-category="diamond">
-                <div class="img-wrap hover-slider" onclick="openQuickView('Minimalist Diamond Pendant', '₹ 22,500', 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=600&auto=format&fit=crop', '5')">
-                    <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=600&auto=format&fit=crop" class="slider-img active" alt="Pendant 1">
-                    <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop" class="slider-img" alt="Pendant 2">
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="event.stopPropagation(); openQuickView('Minimalist Diamond Pendant', '₹ 22,500', 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=600&auto=format&fit=crop', '5')">Quick View</button>
-                        <form action="/cart/add" method="POST" style="flex:1;">
-                            <input type="hidden" name="productId" value="5">
-                            <button type="submit" class="btn-outline" style="background: var(--brand-color); color: white;" onclick="event.stopPropagation();">Add to Cart</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="prod-info">
-                    <div class="prod-price">₹ 22,500</div>
-                    <div class="prod-name">Minimalist Diamond Pendant</div>
-                </div>
-            </div>
+                                    <form action="/cart/add" method="POST" style="flex:1;" class="ajax-cart-form">
+                                        <input type="hidden" name="productId" value="${product.id}">
+                                        <button type="submit" class="btn-outline" style="background: var(--brand-color); color: white;" onclick="event.stopPropagation();">Add to Cart</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="prod-info">
+                                <div class="prod-price">₹ ${product.price}</div>
+                                <div class="prod-name">${product.name}</div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </c:when>
 
-            <div class="product-card" data-category="ring">
-                <div class="img-wrap hover-slider" onclick="openQuickView('Platinum Eternity Band', '₹ 65,000', 'https://images.unsplash.com/photo-1605100804763-247f66126e28?q=80&w=600&auto=format&fit=crop', '6')">
-                    <img src="https://images.unsplash.com/photo-1605100804763-247f66126e28?q=80&w=600&auto=format&fit=crop" class="slider-img active" alt="Band 1">
-                    <img src="https://images.unsplash.com/photo-1599643478524-fb66f70d00f7?q=80&w=600&auto=format&fit=crop" class="slider-img" alt="Band 2">
-                    <div class="card-actions">
-                        <button class="btn-outline" onclick="event.stopPropagation(); openQuickView('Platinum Eternity Band', '₹ 65,000', 'https://images.unsplash.com/photo-1605100804763-247f66126e28?q=80&w=600&auto=format&fit=crop', '6')">Quick View</button>
-                        <form action="/cart/add" method="POST" style="flex:1;">
-                            <input type="hidden" name="productId" value="6">
-                            <button type="submit" class="btn-outline" style="background: var(--brand-color); color: white;" onclick="event.stopPropagation();">Add to Cart</button>
-                        </form>
+                <c:otherwise>
+                    <div style="grid-column: 1 / -1; padding: 50px; font-size: 16px; color: var(--text-gray);">
+                        <i class="fas fa-gem" style="font-size: 30px; color: var(--border-light); margin-bottom:15px;"></i><br>
+                        Our latest collection is currently being curated. Please check back shortly.
                     </div>
-                </div>
-                <div class="prod-info">
-                    <div class="prod-price">₹ 65,000</div>
-                    <div class="prod-name">Platinum Eternity Band</div>
-                </div>
-            </div>
+                </c:otherwise>
+            </c:choose>
         </div>
 
         <div class="pagination" id="pagination-controls"></div>
@@ -676,6 +519,7 @@
         </div>
     </section>
 
+    <!-- MODALS -->
     <div class="modal-overlay" id="quickViewModal">
         <div class="modal-content">
             <i class="fas fa-times close-modal" onclick="closeQuickView()"></i>
@@ -689,13 +533,10 @@
                     This exquisite piece is crafted with precision, featuring certified stones and hallmarked gold. Perfect for elevating your everyday elegance or adding sparkle to a special occasion.
                 </p>
                 <div style="display: flex; gap: 15px; align-items: center; margin-top: auto;">
-                    <form action="/wishlist/add" method="POST" id="wishlist-form">
-                        <input type="hidden" name="productId" id="qv-wishlist-id" value="">
-                        <button type="button" class="wishlist-btn" id="wishlistToggleBtn" onclick="toggleWishlist()">
-                            <i class="far fa-heart" id="wishlistIcon"></i>
-                        </button>
-                    </form>
-                    <form action="/cart/add" method="POST" style="flex: 1;">
+                    <button type="button" class="wishlist-btn" id="wishlistToggleBtn" onclick="toggleWishlist()">
+                        <i class="far fa-heart" id="wishlistIcon"></i>
+                    </button>
+                    <form action="/cart/add" method="POST" style="flex: 1;" class="ajax-cart-form">
                         <input type="hidden" name="productId" id="qv-cart-id" value="">
                         <button type="submit" class="btn-main" style="width: 100%; padding: 18px; font-size: 12px;">Add to Cart</button>
                     </form>
@@ -713,19 +554,15 @@
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-year">2010</div>
-                    <div class="timeline-text">Founded by a family of traditional goldsmiths in a small workshop, focusing entirely on handcrafted, bespoke bridal jewelry.</div>
+                    <div class="timeline-text">Founded by a family of traditional goldsmiths in a small workshop.</div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-year">2015</div>
-                    <div class="timeline-text">Opened our first luxury flagship boutique. We introduced our renowned 100% certified, conflict-free diamond guarantee, setting a new standard for trust in the industry.</div>
+                    <div class="timeline-text">Opened our first luxury flagship boutique. We introduced our renowned 100% certified guarantee.</div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-year">2020</div>
-                    <div class="timeline-text">Launched our global online concierge service, delivering fully insured fine jewelry securely to clients worldwide.</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-year">2026</div>
-                    <div class="timeline-text">Pioneering sustainable luxury by fully transitioning to recycled gold and lab-grown diamond alternatives alongside our natural collections.</div>
+                    <div class="timeline-text">Launched our global online concierge service.</div>
                 </div>
             </div>
         </div>
@@ -738,38 +575,18 @@
                 <ul>
                     <li><a href="/contact">Contact Us</a></li>
                     <li><a href="/faq">Frequently Asked Questions</a></li>
-                    <li><p>1800-419-0066 (9 am-10 pm)</p></li>
+                    <li><p>1800-419-0066</p></li>
                     <li><a href="mailto:cs@shadowandcut.com">cs@shadowandcut.com</a></li>
                 </ul>
-                <div class="contact-group">
-                    <h4>CUSTOMER DELIGHT</h4>
-                    <ul>
-                        <li><a href="/support">Help & Support</a></li>
-                        <li><a href="/faq">FAQ</a></li>
-                        <li><p><i class="fas fa-phone" style="width:20px;"></i> 1800-419-0066</p></li>
-                        <li><a href="mailto:cs@shadowandcut.com"><i class="fas fa-envelope" style="width:20px;"></i> cs@shadowandcut.com</a></li>
-                        <li><p>(9 am-10 pm, 7 days a week)</p></li>
-                    </ul>
-                </div>
             </div>
 
             <div class="footer-col">
                 <h4>POLICIES</h4>
                 <ul>
-                    <li><a href="/about-us">Who we are?</a></li>
-                    <li><a href="/investors">Investor Relations</a></li>
-                    <li><a href="/design-philosophy">Design Philosophy</a></li>
+                    <li><a href="/returns-policy">30-Day Returns</a></li>
+                    <li><a href="/privacy-policy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms & Conditions</a></li>
                 </ul>
-                <div class="contact-group">
-                    <h4>SHOP WITH CONFIDENCE</h4>
-                    <ul>
-                        <li><a href="/returns-policy">30-Day Returns</a></li>
-                        <li><a href="/exchange-buyback">Lifetime Exchange & Buy back</a></li>
-                        <li><a href="/privacy-policy">Privacy Policy</a></li>
-                        <li><a href="/terms">Terms & Conditions</a></li>
-                        <li><a href="/fraud-warning">Fraud Warning Disclaimer</a></li>
-                    </ul>
-                </div>
             </div>
 
             <div class="footer-col">
@@ -777,15 +594,12 @@
                 <ul>
                     <li><a href="/why-buy-from-us">Why Buy From Us?</a></li>
                     <li><a href="/certifications">Our Certifications</a></li>
-                    <li><a href="/press-room">Press Room</a></li>
-                    <li><a href="/testimonials">Testimonials</a></li>
-                    <li><a href="/corporate-gifting">Corporate Gifting</a></li>
                 </ul>
             </div>
 
             <div class="footer-col">
-                <h4>SUBSCRIBE TO OUR NEWSLETTER</h4>
-                <p>Subscribe to receive updates on new arrivals, special offers, and styling inspiration directly to your inbox.</p>
+                <h4>SUBSCRIBE</h4>
+                <p>Subscribe to receive updates on new arrivals directly to your inbox.</p>
                 <form action="/newsletter/subscribe" method="POST" class="newsletter-form">
                     <input type="email" name="email" placeholder="Enter email for our newsletter" required>
                     <button type="submit">SUBSCRIBE</button>
@@ -798,24 +612,11 @@
                 <span>Follow us on</span>
                 <div class="social-icons-row">
                     <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                    <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
-                    <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest-p"></i></a>
                     <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-
-            <div>
-                <div class="payment-row">
-                    <span>We Accept:</span>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="Amex">
-                </div>
-                <div class="copyright-text">
-                    &copy; 2026 Shadow & Cut. All Rights Reserved.<br>
-                    CIN: L72900KA2011PLC059678
-                </div>
+            <div class="copyright-text">
+                &copy; 2026 Shadow & Cut. All Rights Reserved.
             </div>
         </div>
     </footer>
@@ -829,10 +630,13 @@
         function updateSlide() {
             slides.forEach(s => s.classList.remove('active'));
             dots.forEach(d => d.classList.remove('active'));
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.add('active');
+            if(slides.length > 0) {
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
         }
         function moveSlide(dir) {
+            if(slides.length === 0) return;
             currentSlide = (currentSlide + dir + slides.length) % slides.length;
             updateSlide();
         }
@@ -840,7 +644,7 @@
             currentSlide = index;
             updateSlide();
         }
-        setInterval(() => moveSlide(1), 6000);
+        if(slides.length > 0) setInterval(() => moveSlide(1), 6000);
 
         // === SCROLL ANIMATIONS ===
         const observer = new IntersectionObserver((entries) => {
@@ -848,14 +652,14 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal-up, .reveal-zoom').forEach((el) => observer.observe(el));
 
-        // === DYNAMIC ENDLESS COVERFLOW LOGIC ===
+        // === COVERFLOW LOGIC ===
         let cfItems;
         let currentCfIndex = 0;
         let cfAutoInterval;
 
-        // Simulate "most browsed" by randomizing items on load
         function shuffleTopPicks() {
             const container = document.getElementById('coverflow');
+            if(!container) return;
             const items = Array.from(container.children);
             for (let i = items.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -864,15 +668,13 @@
             cfItems = document.querySelectorAll('.cf-item');
         }
 
-        // Modular math mapping to create a seamless infinite loop
         function setCoverflow(index) {
             currentCfIndex = index;
             const total = cfItems.length;
+            if(total === 0) return;
 
             cfItems.forEach((item, i) => {
-                item.className = 'cf-item'; // reset classes
-
-                // Calculate distance wrapped around the array length
+                item.className = 'cf-item';
                 let diff = (i - index + total) % total;
 
                 if (diff === 0) item.classList.add('active');
@@ -880,17 +682,16 @@
                 else if (diff === 2) item.classList.add('next-2');
                 else if (diff === 3) item.classList.add('next-3');
                 else if (diff === 4) item.classList.add('next-4');
-
                 else if (diff === total - 1) item.classList.add('prev');
                 else if (diff === total - 2) item.classList.add('prev-2');
                 else if (diff === total - 3) item.classList.add('prev-3');
                 else if (diff === total - 4) item.classList.add('prev-4');
-
-                else item.classList.add('hidden'); // For arrays larger than 9
+                else item.classList.add('hidden');
             });
         }
 
         function autoMoveCoverflow(direction) {
+            if(!cfItems || cfItems.length === 0) return;
             let nextIndex = (currentCfIndex + direction + cfItems.length) % cfItems.length;
             setCoverflow(nextIndex);
             resetCfAutoSlide();
@@ -904,59 +705,44 @@
             startCfAutoSlide();
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            shuffleTopPicks(); // Randomize items dynamically
-            setCoverflow(currentCfIndex);
-            startCfAutoSlide();
-        });
-
-        // === MULTI-IMAGE HOVER SLIDER ===
-        document.querySelectorAll('.hover-slider').forEach(wrap => {
-            let interval;
-            let images = wrap.querySelectorAll('.slider-img');
-            if(images.length <= 1) return;
-            let currentIndex = 0;
-
-            wrap.addEventListener('mouseenter', () => {
-                interval = setInterval(() => {
-                    images[currentIndex].classList.remove('active');
-                    currentIndex = (currentIndex + 1) % images.length;
-                    images[currentIndex].classList.add('active');
-                }, 1000);
-            });
-
-            wrap.addEventListener('mouseleave', () => {
-                clearInterval(interval);
-                images[currentIndex].classList.remove('active');
-                currentIndex = 0;
-                images[currentIndex].classList.add('active');
-            });
-        });
-
-        // === CLIENT-SIDE SEARCH & FILTERING ENGINE ===
-        const allProductCards = Array.from(document.querySelectorAll('#paginated-products .product-card'));
-        let filteredProducts = [...allProductCards];
-        const itemsPerPage = 3;
+        // === CLIENT-SIDE SEARCH, CATEGORY FILTER & PAGINATION ===
+        let allProductCards = [];
+        let filteredProducts = [];
+        const itemsPerPage = 12;
         let currentPage = 1;
         let currentFilter = 'all';
         let searchQuery = '';
 
+        window.addEventListener('DOMContentLoaded', () => {
+            if (document.getElementById('coverflow')) {
+                shuffleTopPicks();
+                setCoverflow(currentCfIndex);
+                startCfAutoSlide();
+            }
+
+            allProductCards = Array.from(document.querySelectorAll('#paginated-products .product-card'));
+            filteredProducts = [...allProductCards];
+            renderPagination();
+            initAjaxCart();
+        });
+
+        // Fixed Search Logic
         function handleSearch(e) {
             e.preventDefault();
-            searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            // Get input
+            searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+            // Scroll to section
             document.getElementById('collection-section').scrollIntoView({ behavior: 'smooth' });
+            // Run filtering logic
             applyFilters();
         }
 
         function filterCategory(category) {
-            currentFilter = category;
+            currentFilter = category.toLowerCase();
             document.querySelectorAll('.filter-trigger').forEach(tab => {
-                if(tab.getAttribute('data-filter') === category) tab.classList.add('active');
+                if(tab.getAttribute('data-filter') === currentFilter) tab.classList.add('active');
                 else tab.classList.remove('active');
             });
-
-            searchQuery = '';
-            document.getElementById('searchInput').value = '';
             document.getElementById('collection-section').scrollIntoView({ behavior: 'smooth' });
             applyFilters();
         }
@@ -965,14 +751,12 @@
             filteredProducts = allProductCards.filter(product => {
                 const prodName = product.querySelector('.prod-name').innerText.toLowerCase();
                 const prodCategory = product.getAttribute('data-category').toLowerCase();
-                const matchesSearch = prodName.includes(searchQuery);
-                const matchesCategory = currentFilter === 'all' || prodCategory.includes(currentFilter);
+                const matchesSearch = prodName.includes(searchQuery) || prodCategory.includes(searchQuery);
+                const matchesCategory = currentFilter === 'all' || prodCategory === currentFilter;
                 return matchesSearch && matchesCategory;
             });
-
             const noProductsMsg = document.getElementById('no-products-msg');
             noProductsMsg.style.display = filteredProducts.length === 0 ? 'block' : 'none';
-
             currentPage = 1;
             renderPagination();
         }
@@ -981,18 +765,13 @@
             const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
             const pagContainer = document.getElementById('pagination-controls');
             pagContainer.innerHTML = '';
-
-            if (totalPages <= 1) {
-                showPage(currentPage);
-                return;
-            }
+            if (totalPages <= 1) { showPage(currentPage); return; }
 
             pagContainer.innerHTML += `<button class="page-link" onclick="changePage(\${currentPage - 1})" \${currentPage === 1 ? 'disabled' : ''}>&laquo;</button>`;
             for (let i = 1; i <= totalPages; i++) {
                 pagContainer.innerHTML += `<button class="page-link \${i === currentPage ? 'active' : ''}" onclick="changePage(\${i})">\${i}</button>`;
             }
             pagContainer.innerHTML += `<button class="page-link" onclick="changePage(\${currentPage + 1})" \${currentPage === totalPages ? 'disabled' : ''}>&raquo;</button>`;
-
             showPage(currentPage);
         }
 
@@ -1018,16 +797,12 @@
             });
         }
 
-        window.addEventListener('DOMContentLoaded', renderPagination);
-
-        // === REVIEW CAROUSEL LOGIC ===
         function scrollReviews(direction) {
             const track = document.getElementById('review-track');
             const cardWidth = 360;
             track.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
         }
 
-        // === MODALS LOGIC ===
         function openQuickView(title, price, img, id) {
             document.getElementById('qv-title').innerText = title;
             document.getElementById('qv-price').innerText = price;
@@ -1060,6 +835,39 @@
 
         function openJourneyModal() { document.getElementById('journeyModal').classList.add('active'); }
         function closeJourneyModal() { document.getElementById('journeyModal').classList.remove('active'); }
+
+        // === AJAX SILENT CART LOGIC ===
+       function initAjaxCart() {
+           const cartForms = document.querySelectorAll('.ajax-cart-form');
+
+           cartForms.forEach(form => {
+               form.addEventListener('submit', function(e) {
+                   e.preventDefault();
+
+                   const formData = new FormData(this);
+                   const btn = this.querySelector('button[type="submit"]');
+
+                   btn.innerText = 'ADDING...';
+
+                   fetch(this.action, { method: 'POST', body: formData })
+                   .then(response => {
+                       // Update badge visually immediately
+                       const badge = document.getElementById('cart-count-badge');
+                       let count = parseInt(badge.innerText) || 0;
+                       badge.innerText = count + 1;
+
+                       btn.innerText = 'ADDED ✓';
+                       btn.style.backgroundColor = '#28a745';
+
+                       setTimeout(() => {
+                           btn.innerText = 'Add to Cart';
+                           btn.style.backgroundColor = 'var(--brand-color)';
+                       }, 2000);
+                   })
+                   .catch(error => { console.error('Cart Error:', error); btn.innerText = 'ERROR'; });
+               });
+           });
+       }
     </script>
 </body>
 </html>

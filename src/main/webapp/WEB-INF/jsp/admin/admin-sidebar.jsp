@@ -11,9 +11,9 @@
         <a href="/admin/users" class="nav-item"><i class="fas fa-users"></i> Customer Database</a>
 
         <div class="nav-label">Inventory</div>
-        <a href="/products" class="nav-item"><i class="fas fa-gem"></i> All Products</a>
-        <a href="/products/add" class="nav-item"><i class="fas fa-plus"></i> Add Product</a>
-        <a href="/categories" class="nav-item"><i class="fas fa-tags"></i> Categories</a>
+        <a href="/admin/products" class="nav-item"><i class="fas fa-gem"></i> All Products</a>
+        <a href="/admin/products/add" class="nav-item"><i class="fas fa-plus"></i> Add Product</a>
+        <a href="/admin/categories" class="nav-item"><i class="fas fa-tags"></i> Categories</a>
 
         <div class="nav-label">Storefront Control</div>
         <a href="/admin/media" class="nav-item"><i class="fas fa-images"></i> Media Management</a>

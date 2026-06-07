@@ -56,4 +56,11 @@ public class OrderService {
         order.setStatus(status);
         orderRepository.save(order);
     }
+
+    // ==========================================
+    // ADDED FOR ADMIN PANEL
+    // ==========================================
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll(); // Spring Data JPA automatically provides findAll()
+    }
 }

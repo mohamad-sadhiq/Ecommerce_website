@@ -87,8 +87,8 @@
                     <p>Detailed view of inventory item #${product.id}</p>
                 </div>
                 <div class="header-actions">
-                    <a href="/products" class="btn-outline"><i class="fas fa-arrow-left"></i> Back to Inventory</a>
-                    <a href="/products/edit/${product.id}" class="btn-primary"><i class="fas fa-pen"></i> Edit Piece</a>
+                    <a href="/admin/products" class="btn-outline"><i class="fas fa-arrow-left"></i> Back to Inventory</a>
+                    <a href="/admin/products/edit/${product.id}" class="btn-primary"><i class="fas fa-pen"></i> Edit Piece</a>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@
                     </div>
 
                     <div class="action-row">
-                        <a href="/products/delete/${product.id}" onclick="return confirm('Permanently delete this product?');" class="btn-outline" style="color: #dc3545; border-color: #dc3545;">Delete Product</a>
+                        <a href="/admin/products/delete/${product.id}" onclick="return confirm('Permanently delete this product?');" class="btn-outline" style="color: #dc3545; border-color: #dc3545;">Delete Product</a>
                     </div>
                 </div>
             </div>
