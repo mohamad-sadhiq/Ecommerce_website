@@ -23,8 +23,10 @@ public class CartController {
         if (user == null) return "redirect:/login";
 
         List<Cart> cartItems = cartService.getCartDetails(user);
+
+        // The Fix: Safely converting the BigDecimal price to double for the calculation
         double cartTotal = cartItems.stream()
-                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
+                .mapToDouble(item -> item.getProduct().getPrice().doubleValue() * item.getQuantity())
                 .sum();
 
         model.addAttribute("cartItems", cartItems);

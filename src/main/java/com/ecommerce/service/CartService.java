@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -29,14 +28,27 @@ public class CartService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
 
-        Optional<Cart> existingCartItem = cartRepository.findByUserAndProductId(user, productId);
+        // Bulletproof check: Manually scan the user's cart to find a match
+        List<Cart> userCart = cartRepository.findByUser(user);
+        Cart existingCartItem = null;
 
-        if (existingCartItem.isPresent()) {
-            Cart cartItem = existingCartItem.get();
-            cartItem.setQuantity(cartItem.getQuantity() + quantity);
-            cartRepository.save(cartItem);
+        for (Cart item : userCart) {
+            if (item.getProduct().getId().equals(productId)) {
+                existingCartItem = item;
+                break;
+            }
+        }
+
+        if (existingCartItem != null) {
+            // Item exists, just increase quantity
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
+            cartRepository.save(existingCartItem);
         } else {
-            Cart newCartItem = new Cart(user, product, quantity);
+            // Brand new item, use default constructor and setters to avoid errors
+            Cart newCartItem = new Cart();
+            newCartItem.setUser(user);
+            newCartItem.setProduct(product);
+            newCartItem.setQuantity(quantity);
             cartRepository.save(newCartItem);
         }
     }
@@ -46,6 +58,10 @@ public class CartService {
     }
 
     public void clearCart(User user) {
-        cartRepository.deleteByUser(user);
+        // Bulletproof clear: Fetch all and delete, avoiding custom SQL queries
+        List<Cart> userCart = cartRepository.findByUser(user);
+        if (!userCart.isEmpty()) {
+            cartRepository.deleteAll(userCart);
+        }
     }
 }

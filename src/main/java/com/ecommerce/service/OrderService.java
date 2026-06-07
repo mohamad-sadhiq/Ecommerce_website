@@ -23,8 +23,9 @@ public class OrderService {
             throw new IllegalStateException("Cart is empty");
         }
 
+        // The Fix: Added .doubleValue() to safely convert the Product's BigDecimal price
         double total = cartItems.stream()
-                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
+                .mapToDouble(item -> item.getProduct().getPrice().doubleValue() * item.getQuantity())
                 .sum();
 
         Order order = new Order();
@@ -34,10 +35,10 @@ public class OrderService {
         order.setStatus("PENDING");
 
         Order savedOrder = orderRepository.save(order);
-        
+
         // Clear cart after checkout
         cartService.clearCart(user);
-        
+
         return savedOrder;
     }
 
