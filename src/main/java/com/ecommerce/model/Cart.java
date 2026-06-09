@@ -3,29 +3,25 @@ package com.ecommerce.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "carts")
+@Table(name = "cart_items")
 public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(nullable = false)
     private Integer quantity;
 
     public Cart() {}
-
-    public Cart(User user, Product product, Integer quantity) {
-        this.user = user;
-        this.product = product;
-        this.quantity = quantity;
-    }
 
     // Getters and Setters
     public Long getId() { return id; }

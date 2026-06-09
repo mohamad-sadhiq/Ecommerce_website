@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/orders")
@@ -22,7 +23,10 @@ public class OrderController {
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null) return "redirect:/login";
 
+        // Creates the order as PENDING and clears the cart
         Order order = orderService.createOrder(user, shippingAddress);
+
+        // Redirects to Member 4's Payment Gateway
         return "redirect:/payments/status/" + order.getId();
     }
 
@@ -31,8 +35,13 @@ public class OrderController {
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null) return "redirect:/login";
 
-        List<Order> orders = orderService.getOrdersByUser(user);
-        model.addAttribute("orders", orders);
+        // Fetch user orders, but hide PENDING (unpaid/abandoned) checkouts from their history
+        List<Order> allUserOrders = orderService.getOrdersByUser(user);
+        List<Order> activeOrders = allUserOrders.stream()
+                .filter(o -> !"PENDING".equalsIgnoreCase(o.getStatus()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("orders", activeOrders);
         return "orders/order-list";
     }
 

@@ -10,40 +10,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root {
-            --bg-white: #ffffff;
-            --bg-cream: #faf9f7;
-            --text-dark: #111111;
-            --text-gray: #666666;
-            --brand-color: #7b1e2e;
-            --gold-accent: #cda53f;
-            --border-light: #eaeaea;
-        }
-
+        :root { --bg-white: #ffffff; --bg-cream: #faf9f7; --text-dark: #111111; --text-gray: #666666; --brand-color: #7b1e2e; --gold-accent: #cda53f; --border-light: #eaeaea; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--bg-cream); color: var(--text-dark); font-family: 'Jost', sans-serif; }
         h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; }
         a { text-decoration: none; color: inherit; transition: 0.3s; }
 
-        /* === HEADER === */
         .utility-bar { background-color: var(--brand-color); color: white; text-align: center; padding: 12px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
         .header-main { display: flex; justify-content: space-between; align-items: center; padding: 25px 50px; background: var(--bg-white); border-bottom: 1px solid var(--border-light); }
         .brand-logo { font-size: 28px; font-weight: 600; color: var(--brand-color); letter-spacing: 4px; }
         .back-link { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-gray); font-weight: 500; display: flex; align-items: center; gap: 8px; }
         .back-link:hover { color: var(--brand-color); }
 
-        /* === MAIN CONTAINER === */
         .page-wrapper { max-width: 1000px; margin: 60px auto; padding: 0 40px; animation: fadeIn 0.8s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .page-title { font-size: 32px; margin-bottom: 40px; color: var(--text-dark); border-bottom: 1px solid var(--border-light); padding-bottom: 20px; }
 
-        /* === EMPTY STATE === */
         .empty-state { text-align: center; padding: 80px 0; background: var(--bg-white); box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
         .empty-state i { font-size: 50px; color: var(--border-light); margin-bottom: 20px; }
         .empty-state h3 { font-size: 22px; color: var(--text-dark); margin-bottom: 15px; }
 
-        /* === TABLE STYLING === */
         .table-container { background: var(--bg-white); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); border-radius: 4px; }
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; padding: 15px; border-bottom: 2px solid var(--border-light); color: var(--text-gray); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
@@ -53,9 +40,8 @@
         .order-id { font-family: 'Playfair Display', serif; font-weight: 600; color: var(--brand-color); }
         .order-price { font-weight: 500; }
 
-        /* === STATUS BADGES === */
         .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: inline-block; }
-        .status-pending { background: #fff3cd; color: #856404; }
+        .status-processing { background: #e2e3e5; color: #383d41; }
         .status-paid { background: #d1ecf1; color: #0c5460; }
         .status-shipped { background: #cce5ff; color: #004085; }
         .status-delivered { background: #d4edda; color: #155724; }
@@ -81,8 +67,8 @@
                 <div class="empty-state">
                     <i class="fas fa-box-open"></i>
                     <h3 class="serif-font">No orders found</h3>
-                    <p style="color: var(--text-gray); margin-bottom: 30px;">You haven't placed any orders yet.</p>
-                    <a href="/products" class="btn-view" style="padding: 12px 30px; background: var(--brand-color); color: white; border-color: var(--brand-color);">Discover Collections</a>
+                    <p style="color: var(--text-gray); margin-bottom: 30px;">You haven't placed any completed orders yet.</p>
+                    <a href="/" class="btn-view" style="padding: 12px 30px; background: var(--brand-color); color: white; border-color: var(--brand-color);">Discover Collections</a>
                 </div>
             </c:when>
             <c:otherwise>

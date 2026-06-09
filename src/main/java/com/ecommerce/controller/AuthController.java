@@ -2,6 +2,7 @@ package com.ecommerce.controller;
 
 import com.ecommerce.model.User;
 import com.ecommerce.service.UserService;
+import com.ecommerce.service.CartService; // Added CartService
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,13 +17,14 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    // Show Login Page: GET /login
+    @Autowired
+    private CartService cartService;  // Injecting CartService
+
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";
     }
 
-    // Handle Login Submission: POST /login
     @PostMapping("/login")
     public String loginUser(@RequestParam String email,
                             @RequestParam String password,
@@ -32,28 +34,25 @@ public class AuthController {
         User user = userService.loginUser(email, password);
 
         if (user != null) {
-            // Success! Save user to session
             session.setAttribute("loggedInUser", user);
 
-            // ROLE-BASED REDIRECT
-            // Ensure your User model has a getRole() method that returns "ADMIN" or "USER"
+            // THE FIX: Load the user's database cart into the session immediately upon login
+            session.setAttribute("cart", cartService.getCartDetails(user));
+
             if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-                return "redirect:/admin/dashboard"; // Send admins straight to the backend
+                return "redirect:/admin/dashboard";
             } else {
-                return "redirect:/"; // Send regular customers to the luxury storefront
+                return "redirect:/";
             }
 
         } else {
-            // Fail! Reload login page with an error message
             model.addAttribute("error", "Invalid email or password.");
             return "login";
         }
     }
 
-    // Handle Logout: GET /logout
     @GetMapping("/logout")
     public String logoutUser(HttpSession session) {
-        // Destroy the session
         session.invalidate();
         return "redirect:/login?logout=true";
     }

@@ -6,6 +6,7 @@ import com.ecommerce.model.Cart;
 import com.ecommerce.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -23,10 +24,10 @@ public class OrderService {
             throw new IllegalStateException("Cart is empty");
         }
 
-        // The Fix: Added .doubleValue() to safely convert the Product's BigDecimal price
-        double total = cartItems.stream()
-                .mapToDouble(item -> item.getProduct().getPrice().doubleValue() * item.getQuantity())
-                .sum();
+        // Precise financial math using BigDecimal
+        BigDecimal total = cartItems.stream()
+                .map(item -> item.getProduct().getPrice().multiply(new BigDecimal(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         Order order = new Order();
         order.setUser(user);
@@ -34,9 +35,8 @@ public class OrderService {
         order.setShippingAddress(shippingAddress);
         order.setStatus("PENDING");
 
+        // Save order and clear cart
         Order savedOrder = orderRepository.save(order);
-
-        // Clear cart after checkout
         cartService.clearCart(user);
 
         return savedOrder;
@@ -57,10 +57,7 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    // ==========================================
-    // ADDED FOR ADMIN PANEL
-    // ==========================================
     public List<Order> getAllOrders() {
-        return orderRepository.findAll(); // Spring Data JPA automatically provides findAll()
+        return orderRepository.findAll();
     }
 }

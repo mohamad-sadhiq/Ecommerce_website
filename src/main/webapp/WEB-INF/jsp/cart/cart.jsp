@@ -11,190 +11,133 @@
 
     <style>
         :root {
+            --bg-main: #f4f5f7;
             --bg-white: #ffffff;
-            --bg-cream: #faf9f7;
             --text-dark: #111111;
-            --text-gray: #666666;
+            --text-gray: #757575;
             --brand-color: #7b1e2e;
             --gold-accent: #cda53f;
-            --border-light: #eaeaea;
+            --border-light: #eaeef2;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: var(--bg-cream); color: var(--text-dark); font-family: 'Jost', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-dark); font-family: 'Jost', sans-serif; overflow-x: hidden; }
         h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; }
         a { text-decoration: none; color: inherit; transition: 0.3s; }
 
-        /* === HEADER === */
-        .utility-bar { background-color: var(--brand-color); color: white; text-align: center; padding: 12px; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
-        .header-main { display: flex; justify-content: space-between; align-items: center; padding: 25px 50px; background: var(--bg-white); border-bottom: 1px solid var(--border-light); }
-        .brand-logo { font-size: 28px; font-weight: 600; color: var(--brand-color); letter-spacing: 4px; }
-        .header-actions { display: flex; gap: 30px; align-items: flex-end; }
-        .action-item { position: relative; display: flex; flex-direction: column; align-items: center; font-size: 14px; color: #333; transition: 0.3s; font-weight: 500; padding-bottom: 10px; margin-bottom: -10px; }
-        .action-item i { font-size: 24px; margin-bottom: 5px; color: var(--text-gray); transition: 0.3s; font-weight: 900; }
-        .action-item:hover, .action-item:hover i { color: var(--brand-color); }
+        .header-main { background: var(--bg-white); height: 70px; display: flex; justify-content: center; align-items: center; padding: 0 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); position: sticky; top: 0; z-index: 100; }
+        .back-btn { position: absolute; left: 40px; font-size: 18px; color: var(--text-dark); }
+        .brand-logo { font-size: 24px; font-weight: 600; color: var(--brand-color); letter-spacing: 3px; }
 
-        /* === CART CONTAINER === */
-        .cart-wrapper { max-width: 1400px; margin: 60px auto; padding: 0 40px; animation: fadeIn 0.8s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .cart-wrapper { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1.6fr 1fr; gap: 30px; align-items: flex-start; }
 
-        .page-title { font-size: 36px; margin-bottom: 40px; color: var(--text-dark); border-bottom: 1px solid var(--border-light); padding-bottom: 20px; }
+        .left-col { display: flex; flex-direction: column; gap: 15px; }
 
-        /* === EMPTY CART === */
-        .empty-cart { text-align: center; padding: 80px 0; background: var(--bg-white); border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
-        .empty-cart i { font-size: 60px; color: var(--border-light); margin-bottom: 20px; }
-        .empty-cart h3 { font-size: 24px; color: var(--text-dark); margin-bottom: 15px; }
-        .empty-cart p { color: var(--text-gray); margin-bottom: 30px; }
+        .cart-item-card { background: var(--bg-white); border-radius: 12px; padding: 20px; display: flex; gap: 20px; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .item-img-wrap { width: 130px; height: 130px; background: #fdfdfd; border: 1px solid var(--border-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 10px; }
+        .item-img-wrap img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
 
-        /* === CART LAYOUT === */
-        .cart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 60px; align-items: start; }
+        .item-details { flex: 1; padding-top: 5px; }
+        .item-title { font-size: 15px; font-weight: 500; color: var(--text-dark); margin-bottom: 8px; padding-right: 30px; }
+        .item-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+        .item-price { font-size: 18px; font-weight: 600; color: var(--brand-color); font-family: 'Playfair Display', serif; }
 
-        .cart-items-section { background: var(--bg-white); padding: 50px; box-shadow: 0 15px 40px rgba(0,0,0,0.03); border-radius: 8px; border: 1px solid var(--border-light); }
-        .cart-table { width: 100%; border-collapse: collapse; }
-        .cart-table th { text-align: left; padding-bottom: 20px; border-bottom: 2px solid var(--border-light); color: var(--text-gray); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
-        .cart-table td { padding: 35px 0; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
-        .cart-table tr:last-child td { border-bottom: none; padding-bottom: 0; }
+        .item-meta { font-size: 12px; color: var(--text-gray); margin-bottom: 15px; display: flex; gap: 20px; }
+        .item-meta span { font-weight: 500; color: var(--text-dark); }
 
-        .product-cell { display: flex; align-items: center; gap: 25px; }
-        .product-img-wrap { width: 110px; height: 110px; background: var(--bg-cream); display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--border-light); padding: 10px; }
-        .product-img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+        .remove-btn { position: absolute; top: 20px; right: 20px; width: 25px; height: 25px; background: #f4f5f7; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-gray); font-size: 10px; transition: 0.3s; }
+        .remove-btn:hover { background: #ffebee; color: #d32f2f; }
 
-        .product-name { font-size: 15px; font-weight: 500; color: var(--text-dark); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        .product-price-sub { color: var(--text-gray); font-size: 13px; }
+        .right-col { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 15px; }
+        .summary-card { background: var(--bg-white); border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
 
-        .price-text { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--brand-color); font-weight: 600; }
+        .cost-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-gray); margin-bottom: 12px; }
+        .cost-row.discount { color: #2e7d32; }
+        .cost-row.total { font-size: 18px; font-weight: 600; color: var(--text-dark); margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-light); }
 
-        .btn-remove { color: #a1a1a1; transition: 0.3s; font-size: 18px; display: inline-block; padding: 10px; border-radius: 50%; border: 1px solid transparent; }
-        .btn-remove:hover { color: #d9534f; border-color: #d9534f; transform: scale(1.05); }
+        .checkout-form { margin-top: 25px; }
+        .address-input { width: 100%; background: #f9f9f9; border: 1px solid var(--border-light); border-radius: 8px; padding: 15px; font-size: 13px; font-family: 'Jost', sans-serif; resize: vertical; min-height: 80px; margin-bottom: 15px; outline: none; transition: 0.3s; }
+        .address-input:focus { border-color: var(--brand-color); background: white; }
 
-        /* === CHECKOUT SECTION === */
-        .checkout-section { background: var(--brand-color); color: white; padding: 50px; border-radius: 8px; position: sticky; top: 40px; box-shadow: 0 20px 50px rgba(123, 30, 46, 0.15); }
-        .checkout-title { font-size: 28px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 20px; margin-bottom: 35px; color: var(--gold-accent); }
+        .btn-place-order { width: 100%; background: var(--brand-color); color: white; padding: 16px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+        .btn-place-order:hover { background: #5a1220; transform: translateY(-2px); }
 
-        .summary-row { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 15px; color: rgba(255,255,255,0.85); letter-spacing: 0.5px; }
-        .total-row { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 26px; font-weight: 600; color: white; }
+        .empty-cart { text-align: center; padding: 80px 20px; background: white; border-radius: 12px; grid-column: 1 / -1; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .empty-cart img { width: 150px; margin-bottom: 20px; opacity: 0.5; }
+        .empty-cart h2 { font-size: 24px; color: var(--text-dark); margin-bottom: 10px; }
+        .empty-cart p { color: var(--text-gray); margin-bottom: 30px; font-size: 14px; }
+        .btn-shop { display: inline-block; padding: 12px 35px; background: var(--brand-color); color: white; border-radius: 25px; font-size: 13px; font-weight: 600; letter-spacing: 1px; }
 
-        .checkout-form { margin-top: 45px; }
-        .input-group { position: relative; margin-bottom: 35px; }
-        .input-group label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-accent); margin-bottom: 12px; font-weight: 500; }
-        .input-group textarea { width: 100%; padding: 18px; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.2); color: white; font-family: 'Jost', sans-serif; outline: none; transition: 0.3s; resize: vertical; min-height: 120px; border-radius: 4px; font-size: 14px; }
-        .input-group textarea:focus { border-color: var(--gold-accent); background: rgba(0,0,0,0.25); }
-        .input-group textarea::placeholder { color: rgba(255,255,255,0.4); }
-
-        .btn-main { width: 100%; padding: 20px; background: var(--gold-accent); color: white; text-transform: uppercase; font-size: 12px; font-weight: 600; letter-spacing: 3px; border: 1px solid var(--gold-accent); border-radius: 4px; transition: 0.4s; text-align: center; cursor: pointer; }
-        .btn-main:hover { background: transparent; color: var(--gold-accent); }
-
-        .security-badge { text-align: center; margin-top: 25px; font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
-
-        @media (max-width: 1024px) {
-            .cart-grid { grid-template-columns: 1fr; }
-            .header-main { padding: 20px 30px; }
-            .cart-wrapper { padding: 0 30px; }
+        @media (max-width: 900px) {
+            .cart-wrapper { grid-template-columns: 1fr; }
+            .right-col { position: static; }
+            .back-btn { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <div class="utility-bar">
-        Secure Checkout | Complimentary Insured Shipping
-    </div>
-
     <header class="header-main">
-        <a href="/" class="brand-logo serif-font">SHADOW & CUT</a>
-
-        <div class="header-actions">
-            <a href="/stores" class="action-item"><i class="fas fa-location-dot"></i><span>Stores</span></a>
-            <a href="/wishlist" class="action-item"><i class="fas fa-heart"></i><span>Wishlist</span></a>
-            <a href="/" class="action-item"><i class="fas fa-arrow-left"></i><span>Shop</span></a>
-        </div>
+        <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="brand-logo serif-font">SHADOW & CUT</div>
     </header>
 
     <div class="cart-wrapper">
-        <h1 class="page-title serif-font">Your Shopping Bag</h1>
-
         <c:choose>
             <c:when test="${empty cartItems}">
                 <div class="empty-cart">
-                    <i class="fas fa-shopping-bag"></i>
-                    <h3 class="serif-font">Your bag is beautifully empty</h3>
-                    <p>Discover our latest collections of fine jewelry and find your perfect piece.</p>
-                    <a href="/" class="btn-main" style="display: inline-block; width: auto; padding: 15px 40px;">Explore Collections</a>
+                    <img src="https://cdn-icons-png.flaticon.com/512/102/102665.png" alt="Empty Bag">
+                    <h2 class="serif-font">Your Shopping Bag is Empty</h2>
+                    <p>Looks like you haven't added anything to your bag yet.</p>
+                    <a href="/" class="btn-shop">CONTINUE SHOPPING</a>
                 </div>
             </c:when>
-
             <c:otherwise>
-                <div class="cart-grid">
-
-                    <div class="cart-items-section">
-                        <table class="cart-table">
-                            <thead>
-                                <tr>
-                                    <th>Item Details</th>
-                                    <th style="text-align: center;">Quantity</th>
-                                    <th style="text-align: right;">Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="item" items="${cartItems}">
-                                    <tr>
-                                        <td>
-                                            <div class="product-cell">
-                                                <div class="product-img-wrap">
-                                                    <img src="${not empty item.product.imageUrl ? item.product.imageUrl : 'https://images.unsplash.com/photo-1599643478524-fb66f70d00f7?q=80&w=200&auto=format&fit=crop'}" class="product-img" alt="Jewelry">
-                                                </div>
-                                                <div>
-                                                    <div class="product-name">${item.product.name}</div>
-                                                    <div class="product-price-sub">Unit Price: ₹ ${item.product.price}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td style="font-size: 15px; font-weight: 500; text-align: center;">${item.quantity}</td>
-                                        <td class="price-text" style="text-align: right;">₹ ${item.product.price * item.quantity}</td>
-                                        <td style="text-align: right; padding-left: 20px;">
-                                            <a href="/cart/remove/${item.id}" class="btn-remove" title="Remove Item"><i class="fas fa-trash-alt"></i></a>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="checkout-section">
-                        <h2 class="checkout-title serif-font">Order Summary</h2>
-
-                        <div class="summary-row">
-                            <span>Subtotal</span>
-                            <span>₹ ${cartTotal}</span>
+                <div class="left-col">
+                    <c:forEach var="item" items="${cartItems}">
+                        <div class="cart-item-card">
+                            <div class="item-img-wrap">
+                                <img src="${item.product.imageUrl}" alt="${item.product.name}">
+                            </div>
+                            <div class="item-details">
+                                <h3 class="item-title">${item.product.name}</h3>
+                                <div class="item-price-row">
+                                    <span class="item-price">₹${item.product.price}</span>
+                                </div>
+                                <div class="item-meta">
+                                    <div>Quantity: <span>${item.quantity}</span></div>
+                                </div>
+                            </div>
+                            <a href="/cart/remove/${item.id}" class="remove-btn" title="Remove"><i class="fas fa-times"></i></a>
                         </div>
-                        <div class="summary-row">
-                            <span>Insured Shipping</span>
-                            <span>Complimentary</span>
-                        </div>
+                    </c:forEach>
+                </div>
 
-                        <div class="total-row serif-font">
-                            <span>Total</span>
-                            <span>₹ ${cartTotal}</span>
+                <div class="right-col">
+                    <div class="summary-card">
+                        <div class="cost-breakdown">
+                            <div class="cost-row">
+                                <span>Subtotal</span>
+                                <span>₹${cartTotal}</span>
+                            </div>
+                            <div class="cost-row discount">
+                                <span>Shipping (Insured)</span>
+                                <span>Free</span>
+                            </div>
+                            <div class="cost-row total">
+                                <span>Total Cost</span>
+                                <span>₹${cartTotal}</span>
+                            </div>
                         </div>
 
                         <form action="/orders/create" method="POST" class="checkout-form">
-                            <div class="input-group">
-                                <label for="shippingAddress">Secure Shipping Address</label>
-                                <textarea name="shippingAddress" id="shippingAddress" required placeholder="Enter your full name, street address, city, state, and pincode..."></textarea>
-                            </div>
-
-                            <button type="submit" class="btn-main">Proceed to Secure Payment</button>
+                            <textarea name="shippingAddress" class="address-input" required placeholder="Enter Complete Delivery Address (Street, City, State, Pincode)"></textarea>
+                            <button type="submit" class="btn-place-order">SECURE CHECKOUT</button>
                         </form>
-
-                        <div class="security-badge">
-                            <i class="fas fa-lock" style="margin-right: 5px;"></i> 256-bit Encrypted Checkout
-                        </div>
                     </div>
-
                 </div>
             </c:otherwise>
         </c:choose>
-
     </div>
 
 </body>

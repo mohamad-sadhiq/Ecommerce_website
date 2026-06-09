@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -24,13 +25,13 @@ public class CartController {
 
         List<Cart> cartItems = cartService.getCartDetails(user);
 
-        // The Fix: Safely converting the BigDecimal price to double for the calculation
-        double cartTotal = cartItems.stream()
-                .mapToDouble(item -> item.getProduct().getPrice().doubleValue() * item.getQuantity())
-                .sum();
+        // Strict BigDecimal Math
+        BigDecimal cartTotal = cartItems.stream()
+                .map(item -> item.getProduct().getPrice().multiply(new BigDecimal(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         model.addAttribute("cartItems", cartItems);
-        model.addAttribute("cartTotal", cartTotal);
+        model.addAttribute("cartTotal", cartTotal.toPlainString()); // toPlainString enforces standard numbers
         return "cart/cart";
     }
 
@@ -42,6 +43,8 @@ public class CartController {
         if (user == null) return "redirect:/login";
 
         cartService.addToCart(user, productId, quantity);
+        session.setAttribute("cart", cartService.getCartDetails(user));
+
         return "redirect:/cart";
     }
 
@@ -51,6 +54,8 @@ public class CartController {
         if (user == null) return "redirect:/login";
 
         cartService.removeFromCart(cartId);
+        session.setAttribute("cart", cartService.getCartDetails(user));
+
         return "redirect:/cart";
     }
 }

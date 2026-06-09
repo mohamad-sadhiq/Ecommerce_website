@@ -12,9 +12,14 @@
     <style>
         /* === LUXURY VARIABLES === */
         :root {
-            --bg-white: #ffffff; --bg-cream: #faf9f7; --text-dark: #111111;
-            --text-gray: #666666; --icon-light: #444444; --brand-color: #7b1e2e;
-            --gold-accent: #cda53f; --border-light: #eaeaea;
+            --bg-white: #ffffff;
+            --bg-cream: #faf9f7;
+            --text-dark: #111111;
+            --text-gray: #666666;
+            --icon-light: #444444;
+            --brand-color: #7b1e2e;
+            --gold-accent: #cda53f;
+            --border-light: #eaeaea;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -160,9 +165,24 @@
         .slider-img.active { opacity: 1; z-index: 2; }
         .product-card:hover .slider-img.active { transform: scale(1.08); }
 
-        .wishlist-btn-small { position: absolute; top: 15px; right: 15px; z-index: 5; background: white; border: 1px solid var(--border-light); border-radius: 50%; width: 35px; height: 35px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; color: #ccc; transition: 0.3s; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        /* UPGRADED SHINE HOVER EFFECT */
+        .img-wrap::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            transition: 0.8s ease-in-out;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .product-card:hover .img-wrap::after { left: 150%; }
+
+        .wishlist-btn-small { background: white; border: 1px solid var(--border-light); border-radius: 50%; width: 35px; height: 35px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; color: #ccc; transition: 0.3s; display: flex; align-items: center; justify-content: center; font-size: 14px; }
         .wishlist-btn-small:hover { color: var(--brand-color); border-color: var(--brand-color); transform: scale(1.1); }
-        .wishlist-btn-small.active { color: var(--brand-color); background: #fff5f5; border-color: var(--brand-color); }
 
         .card-actions { position: absolute; bottom: -60px; left: 0; width: 100%; padding: 15px; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); display: flex; gap: 10px; transition: bottom 0.4s cubic-bezier(0.25, 1, 0.5, 1); border-top: 1px solid var(--border-light); z-index: 4; }
         .product-card:hover .card-actions { bottom: 0; }
@@ -217,7 +237,6 @@
         .modal-right { flex: 1; padding: 50px 40px; display: flex; flex-direction: column; justify-content: center; }
         .wishlist-btn { background: none; border: 1px solid var(--border-light); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--icon-light); transition: 0.3s; cursor: pointer; }
         .wishlist-btn:hover { border-color: var(--brand-color); color: var(--brand-color); }
-        .wishlist-btn.active { background: var(--brand-color); color: white; border-color: var(--brand-color); }
 
         #journeyModal .modal-content { width: 800px; height: 80vh; flex-direction: column; padding: 50px; overflow-y: auto; background: var(--bg-cream); }
         .timeline { border-left: 2px solid var(--gold-accent); padding-left: 30px; margin-top: 30px; margin-left: 20px; }
@@ -436,9 +455,12 @@
                         <div class="product-card" data-category="${product.category.name.toLowerCase()}">
                             <div class="img-wrap hover-slider" onclick="openQuickView('${product.name}', '₹ ${product.price}', '${product.imageUrl}', '${product.id}')">
 
-                                <button class="wishlist-btn-small" onclick="event.stopPropagation(); this.classList.toggle('active');">
-                                    <i class="fas fa-heart"></i>
-                                </button>
+                                <form action="/wishlist/add" method="POST" style="position: absolute; top: 15px; right: 15px; z-index: 5;">
+                                    <input type="hidden" name="productId" value="${product.id}">
+                                    <button type="submit" class="wishlist-btn-small" onclick="event.stopPropagation();">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                </form>
 
                                 <img src="${product.imageUrl}" class="slider-img active" alt="${product.name}">
 
@@ -515,11 +537,10 @@
             </div>
         </div>
         <div style="margin-top: 50px;">
-            <button class="btn-main" onclick="window.location.href='/login?redirect=/review/new'">Write a Review</button>
+            <button class="btn-main" onclick="window.location.href='/review/new'">Write a Review</button>
         </div>
     </section>
 
-    <!-- MODALS -->
     <div class="modal-overlay" id="quickViewModal">
         <div class="modal-content">
             <i class="fas fa-times close-modal" onclick="closeQuickView()"></i>
@@ -533,9 +554,12 @@
                     This exquisite piece is crafted with precision, featuring certified stones and hallmarked gold. Perfect for elevating your everyday elegance or adding sparkle to a special occasion.
                 </p>
                 <div style="display: flex; gap: 15px; align-items: center; margin-top: auto;">
-                    <button type="button" class="wishlist-btn" id="wishlistToggleBtn" onclick="toggleWishlist()">
-                        <i class="far fa-heart" id="wishlistIcon"></i>
-                    </button>
+                    <form action="/wishlist/add" method="POST" id="wishlist-form">
+                        <input type="hidden" name="productId" id="qv-wishlist-id" value="">
+                        <button type="submit" class="wishlist-btn" id="wishlistToggleBtn">
+                            <i class="far fa-heart" id="wishlistIcon"></i>
+                        </button>
+                    </form>
                     <form action="/cart/add" method="POST" style="flex: 1;" class="ajax-cart-form">
                         <input type="hidden" name="productId" id="qv-cart-id" value="">
                         <button type="submit" class="btn-main" style="width: 100%; padding: 18px; font-size: 12px;">Add to Cart</button>
@@ -726,14 +750,10 @@
             initAjaxCart();
         });
 
-        // Fixed Search Logic
         function handleSearch(e) {
             e.preventDefault();
-            // Get input
             searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
-            // Scroll to section
             document.getElementById('collection-section').scrollIntoView({ behavior: 'smooth' });
-            // Run filtering logic
             applyFilters();
         }
 
@@ -809,65 +829,51 @@
             document.getElementById('qv-img').src = img;
             document.getElementById('qv-cart-id').value = id;
             document.getElementById('qv-wishlist-id').value = id;
-
-            const icon = document.getElementById('wishlistIcon');
-            const btn = document.getElementById('wishlistToggleBtn');
-            icon.className = 'far fa-heart';
-            btn.classList.remove('active');
-
             document.getElementById('quickViewModal').classList.add('active');
         }
-        function closeQuickView() { document.getElementById('quickViewModal').classList.remove('active'); }
 
-        function toggleWishlist() {
-            const icon = document.getElementById('wishlistIcon');
-            const btn = document.getElementById('wishlistToggleBtn');
-            if (icon.classList.contains('far')) {
-                icon.className = 'fas fa-heart';
-                btn.classList.add('active');
-                alert("Added to your wishlist!");
-            } else {
-                icon.className = 'far fa-heart';
-                btn.classList.remove('active');
-                alert("Removed from your wishlist!");
-            }
-        }
+        function closeQuickView() { document.getElementById('quickViewModal').classList.remove('active'); }
 
         function openJourneyModal() { document.getElementById('journeyModal').classList.add('active'); }
         function closeJourneyModal() { document.getElementById('journeyModal').classList.remove('active'); }
 
         // === AJAX SILENT CART LOGIC ===
-       function initAjaxCart() {
-           const cartForms = document.querySelectorAll('.ajax-cart-form');
+        function initAjaxCart() {
+            const cartForms = document.querySelectorAll('.ajax-cart-form');
 
-           cartForms.forEach(form => {
-               form.addEventListener('submit', function(e) {
-                   e.preventDefault();
+            cartForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
 
-                   const formData = new FormData(this);
-                   const btn = this.querySelector('button[type="submit"]');
+                    const formData = new FormData(this);
+                    const btn = this.querySelector('button[type="submit"]');
+                    const originalText = btn.innerText;
 
-                   btn.innerText = 'ADDING...';
+                    btn.innerText = 'ADDING...';
 
-                   fetch(this.action, { method: 'POST', body: formData })
-                   .then(response => {
-                       // Update badge visually immediately
-                       const badge = document.getElementById('cart-count-badge');
-                       let count = parseInt(badge.innerText) || 0;
-                       badge.innerText = count + 1;
+                    fetch(this.action, { method: 'POST', body: formData })
+                    .then(response => {
+                        if (response.redirected && response.url.includes('/login')) {
+                            window.location.href = '/login';
+                            return;
+                        }
 
-                       btn.innerText = 'ADDED ✓';
-                       btn.style.backgroundColor = '#28a745';
+                        const badge = document.getElementById('cart-count-badge');
+                        let count = parseInt(badge.innerText) || 0;
+                        badge.innerText = count + 1;
 
-                       setTimeout(() => {
-                           btn.innerText = 'Add to Cart';
-                           btn.style.backgroundColor = 'var(--brand-color)';
-                       }, 2000);
-                   })
-                   .catch(error => { console.error('Cart Error:', error); btn.innerText = 'ERROR'; });
-               });
-           });
-       }
+                        btn.innerText = 'ADDED ✓';
+                        btn.style.backgroundColor = '#28a745';
+
+                        setTimeout(() => {
+                            btn.innerText = originalText;
+                            btn.style.backgroundColor = 'var(--brand-color)';
+                        }, 2000);
+                    })
+                    .catch(error => { console.error('Cart Error:', error); btn.innerText = 'ERROR'; });
+                });
+            });
+        }
     </script>
 </body>
 </html>

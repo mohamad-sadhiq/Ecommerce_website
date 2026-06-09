@@ -1,10 +1,13 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.model.Order;
 import com.ecommerce.model.Product;
+import com.ecommerce.model.StoreSettings;
 import com.ecommerce.model.User;
 import com.ecommerce.service.CategoryService;
 import com.ecommerce.service.OrderService;
 import com.ecommerce.service.ProductService;
+import com.ecommerce.service.SettingsService;
 import com.ecommerce.service.UserService;
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.UserRepository;
@@ -17,6 +20,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class AdminController {
@@ -33,6 +39,8 @@ public class AdminController {
     private UserRepository userRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private SettingsService settingsService;
 
     private boolean isAdmin(HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
@@ -40,8 +48,15 @@ public class AdminController {
     }
 
     // ==========================================
-    // DASHBOARD & USERS
+    // DEFAULT ROUTE & DASHBOARD
     // ==========================================
+
+    // NEW: If they go to /admin, send them to the dashboard!
+    @GetMapping({"/admin", "/admin/"})
+    public String adminDefault(HttpSession session) {
+        if (!isAdmin(session)) return "redirect:/login";
+        return "redirect:/admin/dashboard";
+    }
 
     @GetMapping("/admin/dashboard")
     public String showAdminDashboard(HttpSession session, Model model) {
@@ -49,17 +64,57 @@ public class AdminController {
 
         model.addAttribute("totalUsers", userRepository.count());
         model.addAttribute("totalProducts", productRepository.count());
-        model.addAttribute("totalOrders", 34); // Mock data for now
-        model.addAttribute("totalRevenue", "14,25,000"); // Mock data for now
+        model.addAttribute("totalCategories", categoryService.getAllCategories().size());
+
+        long lowStockCount = productService.getAllProducts(PageRequest.of(0, 1000))
+                .getContent().stream()
+                .filter(p -> p.getQuantity() <= 5)
+                .count();
+        model.addAttribute("pendingProducts", lowStockCount);
+
+        List<Order> allOrders = orderService.getAllOrders();
+        long pendingFulfillment = 0;
+        double grossRevenue = 0.0;
+
+        for (Order order : allOrders) {
+            if (!"PENDING".equalsIgnoreCase(order.getStatus()) && !"CANCELLED".equalsIgnoreCase(order.getStatus())) {
+                if (order.getTotalAmount() != null) {
+                    grossRevenue += order.getTotalAmount().doubleValue();
+                }
+                if ("PAID".equalsIgnoreCase(order.getStatus()) || "PROCESSING".equalsIgnoreCase(order.getStatus())) {
+                    pendingFulfillment++;
+                }
+            }
+        }
+
+        model.addAttribute("totalOrders", pendingFulfillment);
+        model.addAttribute("totalRevenue", String.format("%,.2f", grossRevenue));
 
         return "admin/dashboard";
     }
+
+    // ==========================================
+    // USERS
+    // ==========================================
 
     @GetMapping("/admin/users")
     public String showAdminUsers(HttpSession session, Model model) {
         if (!isAdmin(session)) return "redirect:/login";
         model.addAttribute("users", userService.getAllUsers());
         return "admin/users";
+    }
+
+    @GetMapping("/admin/users/view/{id}")
+    public String viewUserDetailsAdmin(@PathVariable Long id, HttpSession session, Model model) {
+        if (!isAdmin(session)) return "redirect:/login";
+
+        User userProfile = userService.getUserProfile(id);
+        if (userProfile == null) {
+            return "redirect:/admin/users";
+        }
+
+        model.addAttribute("clientProfile", userProfile);
+        return "admin/user-details";
     }
 
     // ==========================================
@@ -69,7 +124,13 @@ public class AdminController {
     @GetMapping("/admin/orders")
     public String showAdminOrders(HttpSession session, Model model) {
         if (!isAdmin(session)) return "redirect:/login";
-        model.addAttribute("orders", orderService.getAllOrders());
+
+        List<Order> allOrders = orderService.getAllOrders();
+        List<Order> activeOrders = allOrders.stream()
+                .filter(o -> !"PENDING".equalsIgnoreCase(o.getStatus()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("orders", activeOrders);
         return "admin/orders";
     }
 
@@ -89,7 +150,7 @@ public class AdminController {
         if (!isAdmin(session)) return "redirect:/login";
         Page<Product> productPage = productService.getAllProducts(PageRequest.of(page, 50));
         model.addAttribute("products", productPage.getContent());
-        return "products/product-list"; // Routes to the products folder
+        return "products/product-list";
     }
 
     @GetMapping("/admin/products/view/{id}")
@@ -99,7 +160,6 @@ public class AdminController {
         return "products/product-details";
     }
 
-    // THIS IS THE METHOD THAT WAS MISSING!
     @GetMapping("/admin/products/add")
     public String showAddProductForm(HttpSession session, Model model) {
         if (!isAdmin(session)) return "redirect:/login";
@@ -169,14 +229,13 @@ public class AdminController {
 
         if (!isAdmin(session)) return "redirect:/login";
 
-        jakarta.servlet.ServletContext context = request.getServletContext();
+        StoreSettings settings = settingsService.getSettings();
+        settings.setShowAnnouncement(showAnnouncement != null);
+        settings.setAnnouncementText(announcementText);
+        settings.setEmergencyClose(emergencyClose != null);
+        settingsService.saveSettings(settings, request.getServletContext());
 
-        // Save states! (If checkbox is checked, it sends a value, otherwise null)
-        context.setAttribute("showAnnouncement", showAnnouncement != null);
-        context.setAttribute("announcementText", announcementText);
-        context.setAttribute("emergencyClose", emergencyClose != null);
-
-        redirectAttributes.addFlashAttribute("successMsg", "Store settings updated successfully!");
+        redirectAttributes.addFlashAttribute("successMsg", "Store settings saved to database successfully!");
         return "redirect:/admin/settings";
     }
 
@@ -193,15 +252,17 @@ public class AdminController {
 
         if (!isAdmin(session)) return "redirect:/login";
 
-        jakarta.servlet.ServletContext context = request.getServletContext();
-        context.setAttribute("slide1_media", slide1Media);
-        context.setAttribute("slide1_heading", slide1Heading);
-        context.setAttribute("slide1_desc", slide1Desc);
-        context.setAttribute("slide2_media", slide2Media);
-        context.setAttribute("slide2_heading", slide2Heading);
-        context.setAttribute("slide2_desc", slide2Desc);
+        StoreSettings settings = settingsService.getSettings();
+        settings.setSlide1Media(slide1Media);
+        settings.setSlide1Heading(slide1Heading);
+        settings.setSlide1Desc(slide1Desc);
+        settings.setSlide2Media(slide2Media);
+        settings.setSlide2Heading(slide2Heading);
+        settings.setSlide2Desc(slide2Desc);
 
-        redirectAttributes.addFlashAttribute("successMsg", "Hero sliders updated successfully!");
+        settingsService.saveSettings(settings, request.getServletContext());
+
+        redirectAttributes.addFlashAttribute("successMsg", "Hero sliders saved to database successfully!");
         return "redirect:/admin/media";
     }
 
@@ -218,15 +279,17 @@ public class AdminController {
 
         if (!isAdmin(session)) return "redirect:/login";
 
-        jakarta.servlet.ServletContext context = request.getServletContext();
-        context.setAttribute("video1_url", video1Url);
-        context.setAttribute("video1_heading", video1Heading);
-        context.setAttribute("video2_url", video2Url);
-        context.setAttribute("video2_heading", video2Heading);
-        context.setAttribute("video3_url", video3Url);
-        context.setAttribute("video3_heading", video3Heading);
+        StoreSettings settings = settingsService.getSettings();
+        settings.setVideo1Url(video1Url);
+        settings.setVideo1Heading(video1Heading);
+        settings.setVideo2Url(video2Url);
+        settings.setVideo2Heading(video2Heading);
+        settings.setVideo3Url(video3Url);
+        settings.setVideo3Heading(video3Heading);
 
-        redirectAttributes.addFlashAttribute("successMsg", "Showcase videos updated successfully!");
+        settingsService.saveSettings(settings, request.getServletContext());
+
+        redirectAttributes.addFlashAttribute("successMsg", "Showcase videos saved to database successfully!");
         return "redirect:/admin/media";
     }
 }

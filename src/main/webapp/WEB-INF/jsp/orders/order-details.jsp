@@ -5,21 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Details | SHADOW & CUT</title>
+    <title>Order Receipt | SHADOW & CUT</title>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root {
-            --bg-white: #ffffff;
-            --bg-cream: #faf9f7;
-            --text-dark: #111111;
-            --text-gray: #666666;
-            --brand-color: #7b1e2e;
-            --gold-accent: #cda53f;
-            --border-light: #eaeaea;
-        }
-
+        :root { --bg-white: #ffffff; --bg-cream: #faf9f7; --text-dark: #111111; --text-gray: #666666; --brand-color: #7b1e2e; --gold-accent: #cda53f; --border-light: #eaeaea; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--bg-cream); color: var(--text-dark); font-family: 'Jost', sans-serif; }
         h1, h2, h3, .serif-font { font-family: 'Playfair Display', serif; }
@@ -44,19 +35,10 @@
         .total-amount { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--brand-color); font-weight: 600; }
 
         .status-badge { padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-top: 5px; }
-        .status-pending { background: #fff3cd; color: #856404; }
+        .status-processing { background: #e2e3e5; color: #383d41; }
         .status-paid { background: #d1ecf1; color: #0c5460; }
         .status-shipped { background: #cce5ff; color: #004085; }
         .status-delivered { background: #d4edda; color: #155724; }
-
-        /* === ADMIN CONTROLS === */
-        .admin-panel { margin-top: 40px; padding: 25px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; border-left: 4px solid #d9534f; }
-        .admin-title { font-size: 14px; font-weight: 600; color: #d9534f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-
-        .admin-form { display: flex; gap: 15px; align-items: center; }
-        .admin-select { flex: 1; padding: 12px 15px; border: 1px solid #ccc; outline: none; font-family: 'Jost', sans-serif; font-size: 14px; cursor: pointer; background: white; }
-        .btn-update { padding: 12px 25px; background: #d9534f; color: white; border: none; text-transform: uppercase; font-size: 11px; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
-        .btn-update:hover { background: #c9302c; }
 
     </style>
 </head>
@@ -86,22 +68,7 @@
             <div class="total-amount">₹ ${order.totalAmount}</div>
         </div>
 
-        <c:if test="${sessionScope.loggedInUser.role == 'ADMIN'}">
-            <div class="admin-panel">
-                <div class="admin-title"><i class="fas fa-shield-alt"></i> Admin Action: Update Status</div>
-                <form action="/orders/update-status/${order.id}" method="POST" class="admin-form">
-                    <select name="status" class="admin-select">
-                        <option value="PENDING" ${order.status == 'PENDING' ? 'selected' : ''}>PENDING</option>
-                        <option value="PAID" ${order.status == 'PAID' ? 'selected' : ''}>PAID</option>
-                        <option value="SHIPPED" ${order.status == 'SHIPPED' ? 'selected' : ''}>SHIPPED</option>
-                        <option value="DELIVERED" ${order.status == 'DELIVERED' ? 'selected' : ''}>DELIVERED</option>
-                    </select>
-                    <button type="submit" class="btn-update">Update Status</button>
-                </form>
-            </div>
-        </c:if>
-
-    </div>
+        </div>
 
 </body>
 </html>
