@@ -17,24 +17,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Show Registration Page: GET /register
-    @GetMapping("/register")
-    public String showRegisterForm(Model model) {
-        model.addAttribute("user", new User());
-        return "register"; // Maps to register.jsp
-    }
-
-    // Handle Registration Submission: POST /register
-    @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user, Model model) {
-        try {
-            userService.registerUser(user);
-            return "redirect:/login?registered=true";
-        } catch (RuntimeException e) {
-            model.addAttribute("error", e.getMessage());
-            return "register";
-        }
-    }
+    // --- REGISTRATION METHODS REMOVED ---
+    // (They are now securely handled by AuthController.java)
 
     // Show Profile Page: GET /profile
     @GetMapping("/profile")

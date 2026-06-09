@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,8 +77,8 @@
                 <h2 class="auth-title serif-font">Welcome Back</h2>
                 <p class="auth-subtitle">Log in to access your wishlist, orders, and exclusive offers.</p>
 
-                <c:if test="${not empty error}">
-                    <div class="alert-box alert-error"><i class="fas fa-exclamation-circle" style="margin-right: 5px;"></i> ${error}</div>
+                <c:if test="${param.error == 'true'}">
+                    <div class="alert-box alert-error"><i class="fas fa-exclamation-circle" style="margin-right: 5px;"></i> Invalid email or password.</div>
                 </c:if>
                 <c:if test="${param.registered == 'true'}">
                     <div class="alert-box alert-success"><i class="fas fa-check-circle" style="margin-right: 5px;"></i> Registration successful! Please log in.</div>

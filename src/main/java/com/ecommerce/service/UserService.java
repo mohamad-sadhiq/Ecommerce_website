@@ -3,6 +3,7 @@ package com.ecommerce.service;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,10 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // 1. Register a new user
+    @Autowired
+    private PasswordEncoder passwordEncoder; // Inject Spring Security's Encoder
+
+    // 1. Register a new user securely
     public User registerUser(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("An account with this email already exists.");
@@ -25,16 +29,20 @@ public class UserService {
             user.setRole("ROLE_CUSTOMER");
         }
 
+        // CRITICAL FIX: Hash the password before saving to the database
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return userRepository.save(user);
     }
 
-    // 2. Login a user
+    // 2. Login a user (Manual fallback - though Spring Security handles this now)
     public User loginUser(String email, String password) {
         Optional<User> userOpt = userRepository.findByEmail(email);
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            if (user.getPassword().equals(password)) {
+            // Compare raw password with hashed password
+            if (passwordEncoder.matches(password, user.getPassword())) {
                 return user;
             }
         }
