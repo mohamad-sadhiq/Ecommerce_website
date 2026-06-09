@@ -46,11 +46,25 @@
         .header-main { display: flex; justify-content: space-between; align-items: center; padding: 25px 50px; background: rgba(255, 255, 255, 0.98); border-bottom: 1px solid var(--border-light); position: sticky; top: 0; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.02); transition: all 0.3s; }
         .brand-logo { font-size: 32px; font-weight: 600; color: var(--brand-color); letter-spacing: 4px; }
 
+        /* === SEARCH BAR & DROPDOWN === */
         .search-box { flex-grow: 1; max-width: 500px; margin: 0 40px; position: relative; }
         .search-box input { width: 100%; padding: 14px 20px 14px 45px; border-radius: 30px; border: 1px solid var(--border-light); background: #f9f9f9; outline: none; transition: 0.4s; font-size: 13px; }
         .search-box input:focus { border-color: var(--gold-accent); background: white; box-shadow: 0 0 20px rgba(205, 165, 63, 0.08); }
         .search-box i.fa-search { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--icon-light); cursor: pointer; transition: 0.3s; }
         .search-box i.fa-search:hover { color: var(--brand-color); }
+
+        @keyframes pulseSearch {
+            0% { transform: translateY(-50%) scale(1); color: var(--icon-light); }
+            50% { transform: translateY(-50%) scale(1.4); color: var(--brand-color); }
+            100% { transform: translateY(-50%) scale(1); color: var(--icon-light); }
+        }
+        .is-searching { animation: pulseSearch 0.5s ease-in-out; }
+
+        .search-suggestions { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid var(--border-light); border-top: none; border-radius: 0 0 20px 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.08); z-index: 1000; display: none; overflow: hidden; }
+        .suggestion-item { padding: 14px 20px 14px 45px; font-size: 13px; color: var(--text-gray); cursor: pointer; transition: 0.2s; border-bottom: 1px solid var(--bg-cream); display: flex; align-items: center; gap: 12px; }
+        .suggestion-item:last-child { border-bottom: none; }
+        .suggestion-item:hover { background: var(--bg-cream); color: var(--brand-color); }
+        .suggestion-item i { color: var(--gold-accent); font-size: 14px; }
 
         .header-actions { display: flex; gap: 30px; align-items: flex-end; }
         .action-item { position: relative; display: flex; flex-direction: column; align-items: center; font-size: 14px; color: #333; transition: 0.3s; font-weight: 500; padding-bottom: 10px; margin-bottom: -10px; }
@@ -110,11 +124,20 @@
         .cf-container { position: relative; width: 100%; height: 480px; display: flex; justify-content: center; align-items: center; perspective: 1200px; overflow: visible; }
 
         .cf-item { position: absolute; width: 260px; height: 420px; background: white; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 20px; border: 1px solid var(--border-light); z-index: 0; cursor: pointer; opacity: 0; pointer-events: none; }
-        .cf-item .img-wrapper { width: 100%; height: 220px; overflow: hidden; border-radius: 6px; margin-bottom: 15px; }
-        .cf-item .img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        .cf-item .img-wrapper { position: relative; width: 100%; height: 220px; overflow: hidden; border-radius: 6px; margin-bottom: 15px; background: var(--bg-cream); }
+        .cf-item .img-wrapper img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+
+        /* SHINE EFFECT FOR COVERFLOW */
+        .cf-item .img-wrapper::after {
+            content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg); transition: 0.8s ease-in-out; z-index: 3; pointer-events: none;
+        }
+        .cf-item:hover .img-wrapper::after { left: 150%; }
+
         .cf-item h3 { font-size: 15px; color: var(--text-dark); margin-bottom: 5px; text-align: center; }
         .cf-item p { font-size: 17px; color: var(--brand-color); font-weight: 600; font-family: 'Playfair Display', serif; }
-        .cf-item .btn-main { width: 100%; padding: 10px; font-size: 10px; margin-top: 10px; background: var(--bg-cream); color: var(--text-dark); border-color: var(--border-light); }
+        .cf-item .btn-main { width: 100%; padding: 10px; font-size: 10px; background: var(--bg-cream); color: var(--text-dark); border-color: var(--border-light); }
 
         .cf-item.active { transform: translateX(0) scale(1.1); z-index: 10; opacity: 1; pointer-events: auto; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15); border-color: var(--gold-accent); }
         .cf-item.active .btn-main { background: var(--brand-color); color: white; border-color: var(--brand-color); }
@@ -165,19 +188,11 @@
         .slider-img.active { opacity: 1; z-index: 2; }
         .product-card:hover .slider-img.active { transform: scale(1.08); }
 
-        /* UPGRADED SHINE HOVER EFFECT */
+        /* SHINE EFFECT FOR REGULAR GRID */
         .img-wrap::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 50%;
-            height: 100%;
+            content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
             background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg);
-            transition: 0.8s ease-in-out;
-            z-index: 3;
-            pointer-events: none;
+            transform: skewX(-25deg); transition: 0.8s ease-in-out; z-index: 3; pointer-events: none;
         }
         .product-card:hover .img-wrap::after { left: 150%; }
 
@@ -208,16 +223,18 @@
         .about-section:hover .about-img img { transform: scale(1.05); }
         .about-text { flex: 1; padding: 80px; text-align: left; }
 
-        /* === CLOTHESLINE REVIEWS === */
+        /* === CLOTHESLINE REVIEWS FIXED === */
         .testimonial-section { background: #fdfbf9; padding: 100px 0; text-align: center; position: relative; }
         .rope-wrapper { position: relative; max-width: 1300px; margin: 40px auto; padding: 0 60px; }
-        .rope-line { position: absolute; top: 60px; left: 0; width: 100%; height: 4px; background: #8c2633; box-shadow: 0 5px 10px rgba(0,0,0,0.15); z-index: 1; }
+
+        .rope-line { position: absolute; top: 25px; left: 0; width: 100%; height: 4px; background: #8c2633; box-shadow: 0 5px 10px rgba(0,0,0,0.15); z-index: 1; }
+
         .rope-track { display: flex; gap: 40px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; padding: 20px 10px 60px; position: relative; z-index: 2; }
         .rope-track::-webkit-scrollbar { display: none; }
 
-        .hanging-card { position: relative; background: white; padding: 50px 40px; border-radius: 2px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); transform-origin: top center; transition: all 0.5s; min-width: 320px; max-width: 320px; flex-shrink: 0; scroll-snap-align: center; margin-top: 15px; }
-        .hanging-card::before { content: ''; position: absolute; top: -35px; left: 50%; transform: translateX(-50%); width: 16px; height: 45px; background: linear-gradient(to right, #e2e8f0, #94a3b8); border-radius: 3px; box-shadow: 2px 2px 8px rgba(0,0,0,0.2); }
-        .hanging-card::after { content: ''; position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 8px; height: 8px; background: #1e293b; border-radius: 50%; }
+        .hanging-card { position: relative; background: white; padding: 50px 40px; border-radius: 2px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); transform-origin: top center; transition: all 0.5s; min-width: 320px; max-width: 320px; flex-shrink: 0; scroll-snap-align: center; margin-top: 50px; }
+        .hanging-card::before { content: ''; position: absolute; top: -45px; left: 50%; transform: translateX(-50%); width: 16px; height: 55px; background: linear-gradient(to right, #e2e8f0, #94a3b8); border-radius: 3px; box-shadow: 2px 2px 8px rgba(0,0,0,0.2); z-index: 3; }
+        .hanging-card::after { content: ''; position: absolute; top: -35px; left: 50%; transform: translateX(-50%); width: 8px; height: 8px; background: #1e293b; border-radius: 50%; z-index: 4; }
         .hanging-card:hover { transform: rotate(2deg) translateY(-10px); box-shadow: 0 25px 50px rgba(0,0,0,0.12); }
 
         .review-btn { position: absolute; top: 50%; transform: translateY(-50%); background: white; width: 45px; height: 45px; border-radius: 50%; color: var(--brand-color); z-index: 10; font-size: 18px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: 0.3s; border: 1px solid var(--border-light); cursor: pointer; }
@@ -254,14 +271,6 @@
         .footer-col a, .footer-col p { color: #d1d5db; font-size: 12px; transition: 0.3s; text-decoration: none; display: block; line-height: 1.5; }
         .footer-col a:hover { color: white; }
 
-        .newsletter-form { display: flex; width: 100%; border-radius: 4px; overflow: hidden; margin-top: 15px; }
-        .newsletter-form input { flex: 1; padding: 10px 15px; background: #112236; border: none; color: white; outline: none; font-size: 12px; }
-        .newsletter-form input::placeholder { color: #8892b0; }
-        .newsletter-form button { padding: 10px 20px; background: white; color: #041527; font-weight: 600; border: none; cursor: pointer; font-size: 12px; transition: 0.3s; }
-        .newsletter-form button:hover { background: #e2e8f0; }
-        .contact-group { margin-top: 25px; }
-        .contact-group h4 { margin-bottom: 12px; }
-
         .footer-bottom { display: flex; justify-content: space-between; align-items: flex-start; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; gap: 20px; padding-top: 10px; }
         .social-horizontal-container { display: flex; align-items: center; gap: 20px; }
         .social-horizontal-container > span { color: #d1d5db; font-size: 14px; font-weight: 500; letter-spacing: 1px; }
@@ -291,10 +300,12 @@
    <header class="header-main" id="navbar">
        <a href="/" class="brand-logo serif-font">SHADOW & CUT</a>
 
-       <div class="search-box">
-           <form id="searchForm" onsubmit="handleSearch(event)" style="width: 100%; position: relative;">
-               <i class="fas fa-search" onclick="document.getElementById('searchForm').dispatchEvent(new Event('submit'))"></i>
-               <input type="text" id="searchInput" placeholder="Search by name or category...">
+      <div class="search-box">
+           <form id="searchForm" onsubmit="handleSearch(event); return false;" style="width: 100%; position: relative;">
+               <i class="fas fa-search" onclick="handleSearch(event)"></i>
+               <input type="text" id="searchInput" placeholder="Search by name or category..." autocomplete="off">
+
+               <div id="searchSuggestions" class="search-suggestions"></div>
            </form>
        </div>
 
@@ -383,10 +394,16 @@
                     <c:when test="${not empty products}">
                         <c:forEach var="product" items="${products}" end="9">
                             <div class="cf-item" onclick="filterCategory('${product.category.name.toLowerCase()}')">
-                                <div class="img-wrapper"><img src="${product.imageUrl}" alt="${product.name}"></div>
+                                <div class="img-wrapper">
+                                    <img src="${product.imageUrl}" alt="${product.name}">
+                                </div>
                                 <h3 class="serif-font">${product.name}</h3>
                                 <p>₹ ${product.price}</p>
-                                <button type="button" class="btn-main" onclick="event.stopPropagation(); document.getElementById('collection-section').scrollIntoView({ behavior: 'smooth' });">View Collection</button>
+
+                                <form action="/cart/add" method="POST" class="ajax-cart-form" style="width: 100%; margin-top: auto;">
+                                    <input type="hidden" name="productId" value="${product.id}">
+                                    <button type="submit" class="btn-main" style="width: 100%;" onclick="event.stopPropagation();">Add to Cart</button>
+                                </form>
                             </div>
                         </c:forEach>
                     </c:when>
@@ -457,9 +474,10 @@
 
                                 <form action="/wishlist/add" method="POST" style="position: absolute; top: 15px; right: 15px; z-index: 5;">
                                     <input type="hidden" name="productId" value="${product.id}">
-                                    <button type="submit" class="wishlist-btn-small" onclick="event.stopPropagation();">
-                                        <i class="far fa-heart"></i>
-                                    </button>
+                                   <button type="submit" class="wishlist-btn-small" onclick="event.stopPropagation();">
+                                       <i class="${userWishlistIds.contains(product.id) ? 'fas' : 'far'} fa-heart"
+                                          style="${userWishlistIds.contains(product.id) ? 'color: var(--brand-color);' : ''}"></i>
+                                   </button>
                                 </form>
 
                                 <img src="${product.imageUrl}" class="slider-img active" alt="${product.name}">
@@ -514,26 +532,33 @@
             <button class="review-btn review-btn-right" onclick="scrollReviews(1)"><i class="fas fa-chevron-right"></i></button>
 
             <div class="rope-track" id="review-track">
-                <div class="hanging-card">
-                    <i class="fas fa-quote-left" style="font-size: 28px; color: var(--gold-accent); margin-bottom: 20px;"></i>
-                    <p style="font-size: 15px; color: #555; font-style: italic; line-height: 1.7; margin-bottom: 25px;">"The diamond quality is absolutely breathtaking. I bought an engagement ring and the service was phenomenal."</p>
-                    <h4 class="serif-font" style="font-size: 16px; color: var(--brand-color);">- Ananya S.</h4>
-                </div>
-                <div class="hanging-card" style="margin-top: 45px;">
-                    <i class="fas fa-quote-left" style="font-size: 28px; color: var(--gold-accent); margin-bottom: 20px;"></i>
-                    <p style="font-size: 15px; color: #555; font-style: italic; line-height: 1.7; margin-bottom: 25px;">"Stunning designs! I love how transparent they are about pricing. The shipping was fast and securely packaged."</p>
-                    <h4 class="serif-font" style="font-size: 16px; color: var(--brand-color);">- Priya M.</h4>
-                </div>
-                <div class="hanging-card">
-                    <i class="fas fa-quote-left" style="font-size: 28px; color: var(--gold-accent); margin-bottom: 20px;"></i>
-                    <p style="font-size: 15px; color: #555; font-style: italic; line-height: 1.7; margin-bottom: 25px;">"Their bespoke service is unmatched. They helped me design the perfect 22Kt gold necklace for my mother."</p>
-                    <h4 class="serif-font" style="font-size: 16px; color: var(--brand-color);">- Rohan K.</h4>
-                </div>
-                <div class="hanging-card" style="margin-top: 45px;">
-                    <i class="fas fa-quote-left" style="font-size: 28px; color: var(--gold-accent); margin-bottom: 20px;"></i>
-                    <p style="font-size: 15px; color: #555; font-style: italic; line-height: 1.7; margin-bottom: 25px;">"I was worried about buying jewelry online, but the certification and beautiful unboxing experience won me over completely."</p>
-                    <h4 class="serif-font" style="font-size: 16px; color: var(--brand-color);">- Vikram D.</h4>
-                </div>
+                <c:choose>
+                    <c:when test="${not empty reviews}">
+                        <c:forEach var="review" items="${reviews}">
+                            <div class="hanging-card">
+                                <div style="color: var(--gold-accent); margin-bottom: 15px; font-size: 14px;">
+                                    <c:forEach begin="1" end="${review.rating}">
+                                        <i class="fas fa-star"></i>
+                                    </c:forEach>
+                                    <c:forEach begin="${review.rating + 1}" end="5">
+                                        <i class="far fa-star"></i>
+                                    </c:forEach>
+                                </div>
+
+                                <i class="fas fa-quote-left" style="font-size: 28px; color: var(--gold-accent); margin-bottom: 20px; opacity: 0.5;"></i>
+                                <p style="font-size: 15px; color: #555; font-style: italic; line-height: 1.7; margin-bottom: 25px;">"${review.content}"</p>
+                                <h4 class="serif-font" style="font-size: 16px; color: var(--brand-color);">- ${review.user.fullName}</h4>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="hanging-card">
+                            <i class="fas fa-quote-left" style="font-size: 28px; color: var(--gold-accent); margin-bottom: 20px; opacity: 0.5;"></i>
+                            <p style="font-size: 15px; color: #555; font-style: italic; line-height: 1.7; margin-bottom: 25px;">"Be the first to share your beautiful experience with Shadow & Cut!"</p>
+                            <h4 class="serif-font" style="font-size: 16px; color: var(--brand-color);">- Welcome</h4>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
         <div style="margin-top: 50px;">
@@ -593,57 +618,54 @@
     </div>
 
     <footer class="footer" id="footer">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h4>ABOUT US</h4>
-                <ul>
-                    <li><a href="/contact">Contact Us</a></li>
-                    <li><a href="/faq">Frequently Asked Questions</a></li>
-                    <li><p>1800-419-0066</p></li>
-                    <li><a href="mailto:cs@shadowandcut.com">cs@shadowandcut.com</a></li>
-                </ul>
-            </div>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>ABOUT US</h4>
+                    <ul>
+                        <li><a href="#footer">Contact Us</a></li>
+                        <li><a href="#about-us">Frequently Asked Questions</a></li>
+                        <li><p>1800-419-0066</p></li>
+                        <li><a href="mailto:cs@shadowandcut.com">cs@shadowandcut.com</a></li>
+                    </ul>
+                </div>
 
-            <div class="footer-col">
-                <h4>POLICIES</h4>
-                <ul>
-                    <li><a href="/returns-policy">30-Day Returns</a></li>
-                    <li><a href="/privacy-policy">Privacy Policy</a></li>
-                    <li><a href="/terms">Terms & Conditions</a></li>
-                </ul>
-            </div>
+                <div class="footer-col">
+                    <h4>POLICIES</h4>
+                    <ul>
+                        <li><a href="#footer">30-Day Returns</a></li>
+                        <li><a href="#footer">Privacy Policy</a></li>
+                        <li><a href="#footer">Terms & Conditions</a></li>
+                    </ul>
+                </div>
 
-            <div class="footer-col">
-                <h4>JEWELLERY GUIDE</h4>
-                <ul>
-                    <li><a href="/why-buy-from-us">Why Buy From Us?</a></li>
-                    <li><a href="/certifications">Our Certifications</a></li>
-                </ul>
-            </div>
+                <div class="footer-col">
+                    <h4>JEWELLERY GUIDE</h4>
+                    <ul>
+                        <li><a href="#about-us">Why Buy From Us?</a></li>
+                        <li><a href="#about-us">Our Certifications</a></li>
+                    </ul>
+                </div>
 
-            <div class="footer-col">
-                <h4>SUBSCRIBE</h4>
-                <p>Subscribe to receive updates on new arrivals directly to your inbox.</p>
-                <form action="/newsletter/subscribe" method="POST" class="newsletter-form">
-                    <input type="email" name="email" placeholder="Enter email for our newsletter" required>
-                    <button type="submit">SUBSCRIBE</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <div class="social-horizontal-container">
-                <span>Follow us on</span>
-                <div class="social-icons-row">
-                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                <div class="footer-col">
+                    <h4>EXCLUSIVE ACCESS</h4>
+                    <p>Create an account to join our inner circle and receive exclusive updates on new arrivals and private collections.</p>
+                    <a href="/register" style="display:inline-block; margin-top:15px; color:var(--gold-accent); font-weight:600; text-transform:uppercase; letter-spacing:1px; border-bottom:1px solid var(--gold-accent); padding-bottom:3px;">Join Now</a>
                 </div>
             </div>
-            <div class="copyright-text">
-                &copy; 2026 Shadow & Cut. All Rights Reserved.
+
+            <div class="footer-bottom">
+                <div class="social-horizontal-container">
+                    <span>Follow us on</span>
+                    <div class="social-icons-row">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="copyright-text">
+                    &copy; 2026 Shadow & Cut. All Rights Reserved.
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
     <script>
         // === HERO SLIDER LOGIC ===
@@ -732,6 +754,7 @@
         // === CLIENT-SIDE SEARCH, CATEGORY FILTER & PAGINATION ===
         let allProductCards = [];
         let filteredProducts = [];
+        let searchableTerms = [];
         const itemsPerPage = 12;
         let currentPage = 1;
         let currentFilter = 'all';
@@ -747,14 +770,70 @@
             allProductCards = Array.from(document.querySelectorAll('#paginated-products .product-card'));
             filteredProducts = [...allProductCards];
             renderPagination();
+
             initAjaxCart();
+            initAjaxWishlist();
+            initLiveSearch();
         });
 
+        // === LIVE AUTOCOMPLETE SEARCH LOGIC ===
+        function initLiveSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const suggestionsBox = document.getElementById('searchSuggestions');
+
+            const categories = Array.from(document.querySelectorAll('.filter-tab')).map(t => t.innerText.trim());
+            const productNames = allProductCards.map(p => p.querySelector('.prod-name').innerText.trim());
+            searchableTerms = [...new Set([...categories, ...productNames])];
+
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                suggestionsBox.innerHTML = '';
+
+                if (!query) {
+                    suggestionsBox.style.display = 'none';
+                    return;
+                }
+
+                const matches = searchableTerms.filter(term => term.toLowerCase().includes(query)).slice(0, 5);
+
+                if (matches.length > 0) {
+                    matches.forEach(match => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item';
+
+                        const isCategory = categories.some(c => c.toLowerCase() === match.toLowerCase());
+                        div.innerHTML = `<i class="fas \${isCategory ? 'fa-tags' : 'fa-gem'}"></i> \${match}`;
+
+                        div.onclick = () => {
+                            searchInput.value = match;
+                            suggestionsBox.style.display = 'none';
+                            handleSearch(new Event('submit'));
+                        };
+                        suggestionsBox.appendChild(div);
+                    });
+                    suggestionsBox.style.display = 'block';
+                } else {
+                    suggestionsBox.style.display = 'none';
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-box')) {
+                    suggestionsBox.style.display = 'none';
+                }
+            });
+        }
+
         function handleSearch(e) {
-            e.preventDefault();
+            if(e) e.preventDefault();
+            const searchIcon = document.querySelector('.search-box i.fa-search');
+            searchIcon.classList.add('is-searching');
+            setTimeout(() => searchIcon.classList.remove('is-searching'), 500);
+
+            document.getElementById('searchSuggestions').style.display = 'none';
             searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
             document.getElementById('collection-section').scrollIntoView({ behavior: 'smooth' });
-            applyFilters();
+            setTimeout(() => applyFilters(), 400);
         }
 
         function filterCategory(category) {
@@ -824,15 +903,31 @@
         }
 
         function openQuickView(title, price, img, id) {
-            document.getElementById('qv-title').innerText = title;
-            document.getElementById('qv-price').innerText = price;
-            document.getElementById('qv-img').src = img;
-            document.getElementById('qv-cart-id').value = id;
-            document.getElementById('qv-wishlist-id').value = id;
-            document.getElementById('quickViewModal').classList.add('active');
-        }
+                    document.getElementById('qv-title').innerText = title;
+                    document.getElementById('qv-price').innerText = price;
+                    document.getElementById('qv-img').src = img;
+                    document.getElementById('qv-cart-id').value = id;
+                    document.getElementById('qv-wishlist-id').value = id;
 
-        function closeQuickView() { document.getElementById('quickViewModal').classList.remove('active'); }
+                    // Find the heart icon on the actual product card that was clicked
+                    const clickedCard = document.querySelector(`.product-card [name="productId"][value="\${id}"]`);
+                    const isWishlisted = clickedCard ? clickedCard.nextElementSibling.querySelector('i').classList.contains('fas') : false;
+
+                    const icon = document.getElementById('wishlistIcon');
+
+                    // Sync the Modal heart with the Card heart!
+                    if (isWishlisted) {
+                        icon.className = 'fas fa-heart';
+                        icon.style.color = 'var(--brand-color)';
+                    } else {
+                        icon.className = 'far fa-heart';
+                        icon.style.color = 'var(--icon-light)';
+                    }
+
+                    document.getElementById('quickViewModal').classList.add('active');
+                }
+
+                function closeQuickView() { document.getElementById('quickViewModal').classList.remove('active'); }
 
         function openJourneyModal() { document.getElementById('journeyModal').classList.add('active'); }
         function closeJourneyModal() { document.getElementById('journeyModal').classList.remove('active'); }
@@ -840,11 +935,9 @@
         // === AJAX SILENT CART LOGIC ===
         function initAjaxCart() {
             const cartForms = document.querySelectorAll('.ajax-cart-form');
-
             cartForms.forEach(form => {
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
-
                     const formData = new FormData(this);
                     const btn = this.querySelector('button[type="submit"]');
                     const originalText = btn.innerText;
@@ -857,20 +950,43 @@
                             window.location.href = '/login';
                             return;
                         }
-
                         const badge = document.getElementById('cart-count-badge');
                         let count = parseInt(badge.innerText) || 0;
                         badge.innerText = count + 1;
-
                         btn.innerText = 'ADDED ✓';
                         btn.style.backgroundColor = '#28a745';
-
                         setTimeout(() => {
                             btn.innerText = originalText;
                             btn.style.backgroundColor = 'var(--brand-color)';
                         }, 2000);
                     })
                     .catch(error => { console.error('Cart Error:', error); btn.innerText = 'ERROR'; });
+                });
+            });
+        }
+
+        // === AJAX SILENT WISHLIST LOGIC ===
+        function initAjaxWishlist() {
+            const wishlistForms = document.querySelectorAll('form[action="/wishlist/add"]');
+            wishlistForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(this);
+                    const btn = this.querySelector('button');
+                    const icon = btn.querySelector('i');
+
+                    fetch(this.action, { method: 'POST', body: formData })
+                    .then(response => {
+                        if (response.redirected && response.url.includes('/login')) {
+                            window.location.href = '/login';
+                            return;
+                        }
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        icon.style.color = 'var(--brand-color)';
+                    })
+                    .catch(error => console.error('Wishlist Error:', error));
                 });
             });
         }

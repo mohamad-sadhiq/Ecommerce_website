@@ -9,6 +9,7 @@ import com.ecommerce.service.OrderService;
 import com.ecommerce.service.ProductService;
 import com.ecommerce.service.SettingsService;
 import com.ecommerce.service.UserService;
+import com.ecommerce.service.WishlistService; // IMPORT WISHLIST
 import com.ecommerce.repository.ProductRepository;
 import com.ecommerce.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,31 +28,22 @@ import java.util.stream.Collectors;
 @Controller
 public class AdminController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private OrderService orderService;
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private SettingsService settingsService;
+    @Autowired private UserService userService;
+    @Autowired private OrderService orderService;
+    @Autowired private ProductService productService;
+    @Autowired private CategoryService categoryService;
+    @Autowired private UserRepository userRepository;
+    @Autowired private ProductRepository productRepository;
+    @Autowired private SettingsService settingsService;
+
+    // THE FIX: Inject Wishlist Service
+    @Autowired private WishlistService wishlistService;
 
     private boolean isAdmin(HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
         return user != null && "ADMIN".equalsIgnoreCase(user.getRole());
     }
 
-    // ==========================================
-    // DEFAULT ROUTE & DASHBOARD
-    // ==========================================
-
-    // NEW: If they go to /admin, send them to the dashboard!
     @GetMapping({"/admin", "/admin/"})
     public String adminDefault(HttpSession session) {
         if (!isAdmin(session)) return "redirect:/login";
@@ -93,10 +85,6 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    // ==========================================
-    // USERS
-    // ==========================================
-
     @GetMapping("/admin/users")
     public String showAdminUsers(HttpSession session, Model model) {
         if (!isAdmin(session)) return "redirect:/login";
@@ -114,12 +102,12 @@ public class AdminController {
         }
 
         model.addAttribute("clientProfile", userProfile);
+
+        // THE FIX: Fetch the user's wishlist and pass it to the Admin UI
+        model.addAttribute("clientWishlist", wishlistService.getUserWishlist(userProfile));
+
         return "admin/user-details";
     }
-
-    // ==========================================
-    // ORDER MANAGEMENT
-    // ==========================================
 
     @GetMapping("/admin/orders")
     public String showAdminOrders(HttpSession session, Model model) {
@@ -140,10 +128,6 @@ public class AdminController {
         orderService.updateOrderStatus(orderId, status);
         return "redirect:/admin/orders";
     }
-
-    // ==========================================
-    // INVENTORY MANAGEMENT (Products & Categories)
-    // ==========================================
 
     @GetMapping("/admin/products")
     public String showAdminProducts(HttpSession session, Model model, @RequestParam(defaultValue = "0") int page) {
@@ -202,10 +186,6 @@ public class AdminController {
         if (!isAdmin(session)) return "redirect:/login";
         return "redirect:/categories";
     }
-
-    // ==========================================
-    // MEDIA & SETTINGS CONTROL
-    // ==========================================
 
     @GetMapping("/admin/media")
     public String showAdminMedia(HttpSession session) {

@@ -21,7 +21,7 @@
         .back-link { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-gray); font-weight: 500; display: flex; align-items: center; gap: 8px; }
         .back-link:hover { color: var(--brand-color); }
 
-        .receipt-container { max-width: 700px; margin: 60px auto; background: var(--bg-white); box-shadow: 0 15px 40px rgba(0,0,0,0.05); padding: 50px; border-top: 4px solid var(--brand-color); animation: fadeIn 0.6s ease-out; position: relative; }
+        .receipt-container { max-width: 800px; margin: 60px auto; background: var(--bg-white); box-shadow: 0 15px 40px rgba(0,0,0,0.05); padding: 50px; border-top: 4px solid var(--brand-color); animation: fadeIn 0.6s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .receipt-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-light); padding-bottom: 20px; margin-bottom: 30px; }
@@ -32,6 +32,16 @@
         .info-label { font-size: 11px; text-transform: uppercase; color: var(--text-gray); letter-spacing: 1px; margin-bottom: 5px; }
         .info-value { font-size: 16px; color: var(--text-dark); line-height: 1.5; }
 
+        /* Order Items Styling */
+        .items-list { margin: 30px 0; border: 1px solid var(--border-light); border-radius: 6px; overflow: hidden; }
+        .item-row { display: flex; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--border-light); background: #fafafa; }
+        .item-row:last-child { border-bottom: none; }
+        .item-img { width: 60px; height: 60px; object-fit: contain; mix-blend-mode: multiply; margin-right: 20px; background: white; border-radius: 4px; padding: 5px; border: 1px solid var(--border-light); }
+        .item-details { flex: 1; }
+        .item-name { font-weight: 500; font-size: 15px; color: var(--text-dark); }
+        .item-qty { font-size: 12px; color: var(--text-gray); margin-top: 4px; }
+        .item-price { font-weight: 600; font-family: 'Playfair Display', serif; color: var(--brand-color); font-size: 16px; }
+
         .total-amount { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--brand-color); font-weight: 600; }
 
         .status-badge { padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-top: 5px; }
@@ -39,7 +49,6 @@
         .status-paid { background: #d1ecf1; color: #0c5460; }
         .status-shipped { background: #cce5ff; color: #004085; }
         .status-delivered { background: #d4edda; color: #155724; }
-
     </style>
 </head>
 <body>
@@ -63,12 +72,26 @@
             <div class="info-value">${order.shippingAddress}</div>
         </div>
 
-        <div class="info-group" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-light);">
-            <div class="info-label">Total Investment</div>
+        <div class="info-label" style="margin-top: 30px;">Items in this Order</div>
+        <div class="items-list">
+            <c:forEach var="item" items="${order.orderItems}">
+                <div class="item-row">
+                    <img src="${item.product.imageUrl}" class="item-img" alt="${item.product.name}">
+                    <div class="item-details">
+                        <div class="item-name">${item.product.name}</div>
+                        <div class="item-qty">Qty: ${item.quantity} × ₹${item.price}</div>
+                    </div>
+                    <div class="item-price">₹${item.price * item.quantity}</div>
+                </div>
+            </c:forEach>
+        </div>
+
+        <div class="info-group" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center;">
+            <div class="info-label" style="margin: 0;">Total Investment</div>
             <div class="total-amount">₹ ${order.totalAmount}</div>
         </div>
 
-        </div>
+    </div>
 
 </body>
 </html>

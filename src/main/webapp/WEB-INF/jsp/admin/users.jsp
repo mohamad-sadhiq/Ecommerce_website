@@ -37,6 +37,14 @@
         tr:hover { background: var(--bg-main); }
 
         .role-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; border: 1px solid var(--border-light); }
+
+        /* NEW: Action Buttons Styling */
+        .action-cell { display: flex; gap: 10px; justify-content: flex-end; align-items: center; }
+        .btn-action { padding: 6px 12px; border-radius: 4px; font-size: 10px; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: 0.3s; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-profile { background: #f8f9fa; border: 1px solid var(--border-light); color: var(--text-dark); }
+        .btn-profile:hover { background: var(--border-light); }
+        .btn-wishlist { background: #fff5f5; border: 1px solid #ffcdd2; color: #d9534f; }
+        .btn-wishlist:hover { background: #d9534f; color: white; border-color: #d9534f; }
     </style>
 </head>
 <body>
@@ -65,7 +73,7 @@
         <div class="dashboard-container">
             <div class="page-header">
                 <h1 class="serif-font">Client Database</h1>
-                <p>View registered accounts and manage administrative access.</p>
+                <p>View registered accounts, manage administrative access, and track user wishlists.</p>
             </div>
 
             <div class="panel">
@@ -76,7 +84,7 @@
                             <th>Full Name</th>
                             <th>Email Address</th>
                             <th>Role</th>
-                            <th style="text-align: right;">Action</th>
+                            <th style="text-align: right;">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,16 +94,21 @@
                                 <td style="font-weight: 500;">${user.fullName}</td>
                                 <td>${user.email}</td>
                                 <td><span class="role-badge">${user.role}</span></td>
-                                <td style="text-align: right;">
-                                    <a href="/admin/users/view/${user.id}" class="role-badge" style="cursor: pointer; background: #fdfaf6; color: var(--text-dark); text-decoration: none; transition: 0.3s; display: inline-block;">
-                                        View Profile <i class="fas fa-arrow-right" style="margin-left: 5px; font-size: 9px;"></i>
-                                    </a>
+                                <td>
+                                    <div class="action-cell">
+                                        <a href="/admin/users/view/${user.id}" class="btn-action btn-profile">
+                                            <i class="far fa-id-badge"></i> Profile
+                                        </a>
+                                        <a href="/admin/users/view/${user.id}#client-wishlist" class="btn-action btn-wishlist">
+                                            <i class="fas fa-heart"></i> Wishlist
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         </c:forEach>
 
                         <c:if test="${empty users}">
-                            <tr><td colspan="5" style="text-align: center; padding: 40px; color: var(--text-gray);">Awaiting connection to User Database (Member 1).</td></tr>
+                            <tr><td colspan="5" style="text-align: center; padding: 40px; color: var(--text-gray);">Awaiting connection to User Database.</td></tr>
                         </c:if>
                     </tbody>
                 </table>
